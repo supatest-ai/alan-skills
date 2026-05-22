@@ -21,6 +21,9 @@ npx skills add supatest-ai/aiden-skills --list
 
 The `npx skills` CLI auto-detects your installed agent (Claude Code, Codex, Cursor, Gemini, OpenCode) and writes skills to the right path.
 
+After installation, verify the target agent's skills directory contains the
+selected Aiden skill folder before starting a new agent session.
+
 ### Manual install
 
 Clone this repo and copy the skill directories you want into your agent's skills location:
