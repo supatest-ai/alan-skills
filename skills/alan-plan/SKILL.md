@@ -1,7 +1,7 @@
 ---
-name: aiden-plan
+name: alan-plan
 version: 1.0.1
-description: Create an implementation plan artifact in Aiden
+description: Create an implementation plan artifact in Alan
 ---
 
 # Plan Creation
@@ -19,7 +19,7 @@ and produce a clear, actionable plan in markdown.
 
    If this is a **revision request** (the user references feedback on an existing
    plan, or mentions a plan artifact), first fetch the existing plan with
-   `mcp__aiden__get_artifact` to understand what was already proposed.
+   `mcp__alan__get_artifact` to understand what was already proposed.
 
 2. **Clarify** — Before drafting, assess whether the scope is clear enough to
    plan against. If it's not — **ask questions. One at a time.**
@@ -78,25 +78,25 @@ and produce a clear, actionable plan in markdown.
    plan involves multiple components, services, or non-obvious relationships.
    Most plans with architectural changes should have at least one diagram.
 
-4. **Persist** — You MUST call the `mcp__aiden__create_plan` MCP tool to save
+4. **Persist** — You MUST call the `mcp__alan__create_plan` MCP tool to save
    your plan. If you skip this, the plan is lost.
 
    Use the active task context when it is present in the prompt. Otherwise:
-   - The task ID is available from the `AIDEN_TASK_ID` environment variable.
-   - The conversation ID is available from the `AIDEN_SESSION_ID` environment variable.
-   - Resolve `teamId` with Aiden MCP context/tools before creating the plan.
+   - The task ID is available from the `ALAN_TASK_ID` environment variable.
+   - The conversation ID is available from the `ALAN_SESSION_ID` environment variable.
+   - Resolve `teamId` with Alan MCP context/tools before creating the plan.
 
    Always pass `taskId`, `conversationId`, and `teamId` explicitly. Do not
    substitute one ID for another.
 
    ```
-   Tool: mcp__aiden__create_plan
+   Tool: mcp__alan__create_plan
    Parameters: {
      "title": "Short descriptive title — Version N",
      "content": "<your full markdown plan>",
      "summary": "One-line summary of what this plan achieves",
-     "taskId": "<active task ID or value of AIDEN_TASK_ID, if set>",
-     "conversationId": "<active conversation ID or value of AIDEN_SESSION_ID>",
+     "taskId": "<active task ID or value of ALAN_TASK_ID, if set>",
+     "conversationId": "<active conversation ID or value of ALAN_SESSION_ID>",
      "teamId": "<resolved team ID>"
    }
    ```
@@ -137,18 +137,18 @@ incomplete. Treat it as a new analysis cycle, not a quick edit.
    - If the feedback includes quoted text (e.g. `On "Setup DB":`), address
      that specific section
 
-Use `mcp__aiden__get_artifact` to fetch the previous plan if you need to
+Use `mcp__alan__get_artifact` to fetch the previous plan if you need to
 reference its full content during revision.
 
 ## Available tools for plan artifacts
 
 | Tool | Use |
 |---|---|
-| `mcp__aiden__create_plan` | Persist a new plan (or revision with `parentId`) |
-| `mcp__aiden__get_artifact` | Fetch an existing plan/artifact by ID |
-| `mcp__aiden__update_artifact` | Update an existing plan's content/metadata |
-| `mcp__aiden__add_artifact_comment` | Add a comment to a plan artifact |
-| `mcp__aiden__resolve_artifact_comment` | Resolve a comment on a plan |
+| `mcp__alan__create_plan` | Persist a new plan (or revision with `parentId`) |
+| `mcp__alan__get_artifact` | Fetch an existing plan/artifact by ID |
+| `mcp__alan__update_artifact` | Update an existing plan's content/metadata |
+| `mcp__alan__add_artifact_comment` | Add a comment to a plan artifact |
+| `mcp__alan__resolve_artifact_comment` | Resolve a comment on a plan |
 
 ## Do NOT
 
