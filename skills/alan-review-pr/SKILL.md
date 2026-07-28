@@ -1,14 +1,14 @@
 ---
-name: aiden-review-pr
+name: alan-review-pr
 version: 1.0.0
-description: Review a GitHub pull request using Aiden's GitHub MCP tools
+description: Review a GitHub pull request using Alan's GitHub MCP tools
 ---
 
-## MANDATORY: Use Aiden MCP Tools
+## MANDATORY: Use Alan MCP Tools
 
-The Aiden MCP server provides GitHub tools that are ALREADY in your tool list.
+The Alan MCP server provides GitHub tools that are ALREADY in your tool list.
 They work exactly like Read, Bash, Edit — you call them as tool invocations.
-They are named with the prefix `mcp__aiden__github_`.
+They are named with the prefix `mcp__alan__github_`.
 
 **Authentication is handled automatically by the MCP server.** You do NOT need
 GitHub tokens, gh CLI auth, SSH keys, .netrc files, environment variables, or
@@ -27,7 +27,7 @@ CLI alternatives.
 
 ### Verify tools are available
 
-Before starting, confirm you can see `mcp__aiden__github_*` tools in your
+Before starting, confirm you can see `mcp__alan__github_*` tools in your
 available tools. If they are NOT available, STOP and tell the user:
 "The GitHub MCP tools are not available. Please check the sandbox MCP configuration."
 
@@ -35,13 +35,13 @@ available tools. If they are NOT available, STOP and tell the user:
 
 All GitHub PR tools require these parameters:
 - `owner` (string): GitHub org or username, e.g. "supatest-ai"
-- `repo` (string): Repository name, e.g. "aiden"
+- `repo` (string): Repository name, e.g. "alan"
 - `prNumber` (integer): PR number, e.g. 42
 
 Example tool call:
 ```
-Tool: mcp__aiden__github_get_pull_request
-Parameters: { "owner": "supatest-ai", "repo": "aiden", "prNumber": 42 }
+Tool: mcp__alan__github_get_pull_request
+Parameters: { "owner": "supatest-ai", "repo": "alan", "prNumber": 42 }
 ```
 
 ### Resolving owner/repo
@@ -54,19 +54,19 @@ command you should run for GitHub operations. Everything else uses MCP tools.
 
 | Tool name | Purpose |
 |-----------|---------|
-| `mcp__aiden__github_get_pull_request` | Get PR details (title, state, labels, merge status) |
-| `mcp__aiden__github_get_pr_diff` | Get unified diff of a PR |
-| `mcp__aiden__github_list_pr_comments` | List all comments on a PR |
-| `mcp__aiden__github_list_pr_reviews` | List all reviews on a PR |
-| `mcp__aiden__github_list_pr_files` | List changed files with additions/deletions |
-| `mcp__aiden__github_get_issue` | Get issue details |
-| `mcp__aiden__github_get_ci_status` | Get CI check run status for a ref |
-| `mcp__aiden__github_add_comment` | Add a comment to an issue or PR |
-| `mcp__aiden__github_create_pr_review` | Submit a review (APPROVE/REQUEST_CHANGES/COMMENT) |
-| `mcp__aiden__github_add_labels` | Add labels to an issue or PR |
-| `mcp__aiden__github_merge_pull_request` | Merge a PR |
-| `mcp__aiden__github_close_issue` | Close an issue or PR |
-| `mcp__aiden__github_request_reviewers` | Request reviewers on a PR |
+| `mcp__alan__github_get_pull_request` | Get PR details (title, state, labels, merge status) |
+| `mcp__alan__github_get_pr_diff` | Get unified diff of a PR |
+| `mcp__alan__github_list_pr_comments` | List all comments on a PR |
+| `mcp__alan__github_list_pr_reviews` | List all reviews on a PR |
+| `mcp__alan__github_list_pr_files` | List changed files with additions/deletions |
+| `mcp__alan__github_get_issue` | Get issue details |
+| `mcp__alan__github_get_ci_status` | Get CI check run status for a ref |
+| `mcp__alan__github_add_comment` | Add a comment to an issue or PR |
+| `mcp__alan__github_create_pr_review` | Submit a review (APPROVE/REQUEST_CHANGES/COMMENT) |
+| `mcp__alan__github_add_labels` | Add labels to an issue or PR |
+| `mcp__alan__github_merge_pull_request` | Merge a PR |
+| `mcp__alan__github_close_issue` | Close an issue or PR |
+| `mcp__alan__github_request_reviewers` | Request reviewers on a PR |
 
 ---
 
@@ -84,21 +84,21 @@ The user will provide one of:
 1. **Resolve owner/repo/prNumber** from the input. If only a PR number is given,
    run `git remote get-url origin` to parse owner and repo.
 
-2. **Fetch PR metadata** — call `mcp__aiden__github_get_pull_request` with
+2. **Fetch PR metadata** — call `mcp__alan__github_get_pull_request` with
    `{ owner, repo, prNumber }` to get title, description, state, labels, branches.
 
-3. **Fetch the diff** — call `mcp__aiden__github_get_pr_diff` to get the unified diff.
+3. **Fetch the diff** — call `mcp__alan__github_get_pr_diff` to get the unified diff.
 
-4. **Fetch changed files** — call `mcp__aiden__github_list_pr_files` to see
+4. **Fetch changed files** — call `mcp__alan__github_list_pr_files` to see
    files modified/added/deleted with line counts.
 
-5. **Fetch existing reviews** — call `mcp__aiden__github_list_pr_reviews` to see
+5. **Fetch existing reviews** — call `mcp__alan__github_list_pr_reviews` to see
    prior review state.
 
-6. **Fetch existing comments** — call `mcp__aiden__github_list_pr_comments` for
+6. **Fetch existing comments** — call `mcp__alan__github_list_pr_comments` for
    ongoing discussion context.
 
-7. **Check CI status** — call `mcp__aiden__github_get_ci_status` with the head
+7. **Check CI status** — call `mcp__alan__github_get_ci_status` with the head
    branch or SHA. If a check failed, include the html_url link so the user can
    view full logs (the tool does not return log output).
 
@@ -109,7 +109,7 @@ The user will provide one of:
    For each finding, determine: severity, file path, start/end line, title,
    description, and a concrete fix prompt for agents.
 
-10. **Post review** — call `mcp__aiden__github_create_pr_review` with inline
+10. **Post review** — call `mcp__alan__github_create_pr_review` with inline
     comments (one per finding) plus a summary body. See formats below.
 
 ### Review Dimensions (priority order)
@@ -135,7 +135,7 @@ Skip: linter-catchable issues, speculative risks, style preferences, pre-existin
 Each finding becomes its own inline comment on the PR. Format the `body` of each comment like this:
 
 ```markdown
-<!-- aiden-review-comment {"id": "aiden_review_{prNumber}_{sequential_4digit}", "file_path": "{path}", "start_line": {start}, "end_line": {end}, "side": "RIGHT"} -->
+<!-- alan-review-comment {"id": "alan_review_{prNumber}_{sequential_4digit}", "file_path": "{path}", "start_line": {start}, "end_line": {end}, "side": "RIGHT"} -->
 
 {severity_icon} **{short_title}**
 
@@ -150,11 +150,11 @@ Each finding becomes its own inline comment on the PR. Format the `body` of each
 
 </details>
 
-<!-- aiden-review-badge-begin -->
-<a href="{aiden_session_url}" target="_blank">
-  <img src="https://app.aiden-platform.com/logo.png" alt="Open in Aiden" height="20">
+<!-- alan-review-badge-begin -->
+<a href="{alan_session_url}" target="_blank">
+  <img src="https://app.tryalan.ai/logo.png" alt="Open in Alan" height="20">
 </a>
-<!-- aiden-review-badge-end -->
+<!-- alan-review-badge-end -->
 ```
 
 **Severity icons:**
@@ -167,7 +167,7 @@ Each finding becomes its own inline comment on the PR. Format the `body` of each
 The `body` parameter of the review (top-level summary) should be:
 
 ```markdown
-**Aiden Review** found {N} potential issues.
+**Alan Review** found {N} potential issues.
 
 | Severity | Count |
 |----------|-------|
@@ -189,26 +189,26 @@ The `body` parameter of the review (top-level summary) should be:
 
 </details>
 
-<!-- aiden-review-badge-begin -->
-<a href="{aiden_session_url}" target="_blank">
-  <img src="https://app.aiden-platform.com/logo.png" alt="Open in Aiden" height="20">
+<!-- alan-review-badge-begin -->
+<a href="{alan_session_url}" target="_blank">
+  <img src="https://app.tryalan.ai/logo.png" alt="Open in Alan" height="20">
 </a>
-<!-- aiden-review-badge-end -->
+<!-- alan-review-badge-end -->
 
 ---
 *Was this helpful? React with 👍 or 👎 to provide feedback.*
 ```
 
-### "Open in Aiden" Badge URL
+### "Open in Alan" Badge URL
 
-Every badge links to the current Aiden session. The user/trigger will provide the
-session URL. Replace `{aiden_session_url}` in every badge with the actual URL.
+Every badge links to the current Alan session. The user/trigger will provide the
+session URL. Replace `{alan_session_url}` in every badge with the actual URL.
 
-If no session URL is provided, fall back to `https://app.aiden-platform.com`.
+If no session URL is provided, fall back to `https://app.tryalan.ai`.
 
 ### Posting the Review
 
-Call `mcp__aiden__github_create_pr_review` with:
+Call `mcp__alan__github_create_pr_review` with:
 - `owner`, `repo`, `prNumber`: from step 1
 - `body`: the summary comment above
 - `event`: "REQUEST_CHANGES" if any 🔴 blocking findings, otherwise "COMMENT"
@@ -220,6 +220,6 @@ Call `mcp__aiden__github_create_pr_review` with:
 **IMPORTANT:**
 - Always post inline comments (one per finding) — do NOT bundle into one big comment
 - Always include the "Prompt for agents" section in every finding
-- Always include the "Open in Aiden" badge on every comment and the summary
-- Replace `{aiden_session_url}` with the actual session URL in every badge
+- Always include the "Open in Alan" badge on every comment and the summary
+- Replace `{alan_session_url}` with the actual session URL in every badge
 - If zero findings, post an approving review with a clean summary
