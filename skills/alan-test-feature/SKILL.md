@@ -1,5 +1,5 @@
 ---
-name: aiden-test-feature
+name: alan-test-feature
 version: 1.1.1
 description: Scope coverage, build a testing strategy, test the feature with agent-browser, capture screenshots/video (always mandatory), upload to S3, and create a structured test report (never skip)
 ---
@@ -16,9 +16,9 @@ Analyze the current branch's changes, scope the coverage level with the user, bu
 
 Use the active task context when it is present in the prompt. Otherwise:
 
-- The task ID is available from the `AIDEN_TASK_ID` environment variable.
-- The conversation ID is available from the `AIDEN_SESSION_ID` environment variable.
-- Resolve `teamId` with Aiden MCP context/tools before creating the report.
+- The task ID is available from the `ALAN_TASK_ID` environment variable.
+- The conversation ID is available from the `ALAN_SESSION_ID` environment variable.
+- Resolve `teamId` with Alan MCP context/tools before creating the report.
 
 When calling `create_test_report`, always pass `taskId`, `conversationId`, and `teamId` explicitly. Do not substitute one ID for another.
 
@@ -42,17 +42,17 @@ Do NOT proceed to Phase 2 without a working `agent-browser` — all browser test
 
 ### 3. Create workspace
 
-All captures (screenshots, videos) MUST be written to `/tmp/aiden-captures/`.
+All captures (screenshots, videos) MUST be written to `/tmp/alan-captures/`.
 
 ```bash
-mkdir -p /tmp/aiden-captures
+mkdir -p /tmp/alan-captures
 ```
 
 > **CRITICAL — file path rules:**
-> - **ONLY** write capture files to `/tmp/aiden-captures/`. Never anywhere else.
+> - **ONLY** write capture files to `/tmp/alan-captures/`. Never anywhere else.
 > - **NEVER** write to `.claude/`, project directories, `reports/`, or any path inside the repo.
 > - `.claude/` is a sensitive system directory — writing to it will be blocked and will abort the test run.
-> - If you are tempted to create a `reports/` or `screenshots/` folder anywhere other than `/tmp/`, stop and use `/tmp/aiden-captures/` instead.
+> - If you are tempted to create a `reports/` or `screenshots/` folder anywhere other than `/tmp/`, stop and use `/tmp/alan-captures/` instead.
 
 ---
 
@@ -233,7 +233,7 @@ agent-browser --session test-feature wait --load networkidle
 **Always start a video recording before any interaction. No exceptions.**
 
 ```bash
-agent-browser --session test-feature record start /tmp/aiden-captures/happy-path.webm
+agent-browser --session test-feature record start /tmp/alan-captures/happy-path.webm
 ```
 
 If video recording fails for technical reasons, note the failure but continue — screenshots are still required.
@@ -243,7 +243,7 @@ If video recording fails for technical reasons, note the failure but continue �
 **Always capture the initial page state before any interaction.**
 
 ```bash
-agent-browser --session test-feature screenshot /tmp/aiden-captures/step-00-initial-state.png
+agent-browser --session test-feature screenshot /tmp/alan-captures/step-00-initial-state.png
 ```
 
 ### 4. Execute each scenario from the testing strategy
@@ -256,7 +256,7 @@ Work through every scenario defined in Phase 1.5. For each scenario:
 - Use `agent-browser wait --load networkidle` or `agent-browser wait 1500` between actions
 - **Take a screenshot after every significant state change** — never go more than 2 meaningful actions without a screenshot:
   ```bash
-  agent-browser --session test-feature screenshot /tmp/aiden-captures/step-NN-description.png
+  agent-browser --session test-feature screenshot /tmp/alan-captures/step-NN-description.png
   ```
   Name screenshots descriptively: `step-02-form-filled.png`, `step-03-submit-clicked.png`, `step-04-success-state.png`
 - Re-snapshot after navigation or DOM changes (refs go stale)
@@ -299,7 +299,7 @@ Work through every scenario defined in Phase 1.5. For each scenario:
 
 ```bash
 agent-browser --session test-feature record stop
-agent-browser --session test-feature screenshot /tmp/aiden-captures/final-state.png
+agent-browser --session test-feature screenshot /tmp/alan-captures/final-state.png
 agent-browser --session test-feature close
 ```
 
@@ -310,7 +310,7 @@ agent-browser --session test-feature close
 WebM files recorded by agent-browser often have `duration = Infinity` in the container header — the video player then shows 0:00. Fix every `.webm` file by remuxing it through ffmpeg, which reads the entire file, computes the real duration, and writes it into the output header:
 
 ```bash
-for f in /tmp/aiden-captures/*.webm; do
+for f in /tmp/alan-captures/*.webm; do
   if command -v ffmpeg >/dev/null 2>&1; then
     ffmpeg -y -i "$f" -c copy "${f%.webm}-fixed.webm" 2>/dev/null \
       && mv "${f%.webm}-fixed.webm" "$f" \
@@ -325,20 +325,20 @@ If ffmpeg is not available, skip this step and continue — the video will still
 
 ## Phase 3: Upload Captures to S3
 
-For each captured file, use the `mcp__aiden__get_upload_url` MCP tool to get a presigned S3 URL, then `curl PUT` the file directly to S3.
+For each captured file, use the `mcp__alan__get_upload_url` MCP tool to get a presigned S3 URL, then `curl PUT` the file directly to S3.
 
 ### Per-file upload flow
 
 1. **Get the file size** (needed by the MCP tool):
    ```bash
-   SIZE=$(stat -c%s "/tmp/aiden-captures/step-01.png" 2>/dev/null || stat -f%z "/tmp/aiden-captures/step-01.png")
+   SIZE=$(stat -c%s "/tmp/alan-captures/step-01.png" 2>/dev/null || stat -f%z "/tmp/alan-captures/step-01.png")
    ```
 
 2. **Call the MCP tool** to get a presigned upload URL:
    ```
-   Tool: mcp__aiden__get_upload_url
+   Tool: mcp__alan__get_upload_url
    Parameters: {
-     "taskId": "<active task ID or value of AIDEN_TASK_ID>",
+     "taskId": "<active task ID or value of ALAN_TASK_ID>",
      "filename": "step-01.png",
      "mimeType": "image/png",
      "size": <SIZE from step 1>
@@ -350,7 +350,7 @@ For each captured file, use the `mcp__aiden__get_upload_url` MCP tool to get a p
    ```bash
    curl -sf -X PUT "<uploadUrl>" \
      -H "Content-Type: image/png" \
-     --data-binary @/tmp/aiden-captures/step-01.png
+     --data-binary @/tmp/alan-captures/step-01.png
    ```
 
 4. **Save the `s3Key`** — you will pass it to `create_test_report` in Phase 4.
@@ -365,7 +365,7 @@ Repeat for each screenshot and video file. Common MIME types:
 
 ## Phase 4: Create Structured Test Report (MANDATORY — NEVER SKIP)
 
-**CRITICAL: You MUST call `mcp__aiden__create_test_report` to complete this skill. This is non-negotiable.**
+**CRITICAL: You MUST call `mcp__alan__create_test_report` to complete this skill. This is non-negotiable.**
 
 - Do NOT output the report as markdown text
 - Do NOT summarize findings in chat only
@@ -375,16 +375,16 @@ Repeat for each screenshot and video file. Common MIME types:
 
 If uploads failed in Phase 3, create the report anyway — omit the media URLs but include all steps, issues, and summary text.
 
-Call the `mcp__aiden__create_test_report` MCP tool with structured data from your testing.
+Call the `mcp__alan__create_test_report` MCP tool with structured data from your testing.
 
 Gather all the data from the previous phases and call the tool:
 
 ```
-Tool: mcp__aiden__create_test_report
+Tool: mcp__alan__create_test_report
 Parameters: {
   "title": "<short description of what was tested>",
-  "taskId": "<active task ID or value of AIDEN_TASK_ID, if set>",
-  "conversationId": "<active conversation ID or value of AIDEN_SESSION_ID>",
+  "taskId": "<active task ID or value of ALAN_TASK_ID, if set>",
+  "conversationId": "<active conversation ID or value of ALAN_SESSION_ID>",
   "teamId": "<resolved team ID>",
   "branch": "<current branch name from git>",
   "baseBranch": "main",
@@ -428,8 +428,8 @@ Parameters: {
 
 ### Output
 
-After calling `mcp__aiden__create_test_report`, tell the user:
-- The test report title, so the user can find the generated artifact in the Aiden UI
+After calling `mcp__alan__create_test_report`, tell the user:
+- The test report title, so the user can find the generated artifact in the Alan UI
 - A link to the artifact when you have enough context to form one (usually `/teams/<teamId>/docs?artifactId=<artifactId>`)
 - A brief summary: what was tested, how many steps passed/failed, any issues found
 - List any bugs or concerns discovered during testing
