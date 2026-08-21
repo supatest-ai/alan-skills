@@ -1,0 +1,5 @@
+{
+  "TITLE": "Can a missing visual check block review cleanly?",
+  "QUESTION": "Exercise the success, failure, and retry behavior of a plan-artifact readiness gate without connecting to production services.",
+  "PROVENANCE": "Alan-owned demonstration · deterministic local states · no external runtime"
+}

@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en" data-artifact-theme="editorial">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>{{TITLE}}</title>
+    <style>
+      :root {
+        --background: #faf9f5;
+        --surface: #ffffff;
+        --surface-muted: #f0eee6;
+        --text: #141413;
+        --muted: #3d3d3a;
+        --soft: #87867f;
+        --accent: #788c5d;
+        --accent-foreground: #faf9f5;
+        --border: #d1cfc5;
+        --success: #7c8f6f;
+        --warning: #b8915a;
+        --danger: #9c6b50;
+        --info: #5e7a9b;
+        --shadow: 0 6px 24px rgba(20, 20, 19, 0.08);
+        --radius-control: 6px;
+        --radius-card: 12px;
+        color-scheme: light dark;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --background: #141413;
+          --surface: #1f1f1d;
+          --surface-muted: #2a2a28;
+          --text: #faf9f5;
+          --muted: #d1cfc5;
+          --soft: #87867f;
+          --accent: #9db07c;
+          --accent-foreground: #141413;
+          --border: #3d3d3a;
+          --success: #9caf8f;
+          --warning: #d3ad7a;
+          --danger: #b88670;
+          --info: #82a0c0;
+          --shadow: 0 6px 24px rgba(0, 0, 0, 0.24);
+        }
+      }
+
+      :root[data-theme="light"] {
+        --background: #faf9f5;
+        --surface: #ffffff;
+        --surface-muted: #f0eee6;
+        --text: #141413;
+        --muted: #3d3d3a;
+        --soft: #87867f;
+        --accent: #788c5d;
+        --accent-foreground: #faf9f5;
+        --border: #d1cfc5;
+        --success: #7c8f6f;
+        --warning: #b8915a;
+        --danger: #9c6b50;
+        --info: #5e7a9b;
+        color-scheme: light;
+      }
+
+      :root[data-theme="dark"] {
+        --background: #141413;
+        --surface: #1f1f1d;
+        --surface-muted: #2a2a28;
+        --text: #faf9f5;
+        --muted: #d1cfc5;
+        --soft: #87867f;
+        --accent: #9db07c;
+        --accent-foreground: #141413;
+        --border: #3d3d3a;
+        --success: #9caf8f;
+        --warning: #d3ad7a;
+        --danger: #b88670;
+        --info: #82a0c0;
+        --shadow: 0 6px 24px rgba(0, 0, 0, 0.24);
+        color-scheme: dark;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        color: var(--text);
+        background: var(--background);
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      button {
+        min-height: 32px;
+        padding: 6px 12px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-control);
+        color: var(--text);
+        background: var(--surface);
+        font: inherit;
+        font-weight: 500;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: var(--surface-muted);
+      }
+
+      button:active {
+        transform: translateY(1px);
+      }
+
+      button:focus-visible,
+      [tabindex]:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      button[aria-pressed="true"] {
+        color: var(--accent-foreground);
+        border-color: var(--accent);
+        background: var(--accent);
+      }
+
+      .page {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 40px 0 64px;
+      }
+
+      .eyebrow,
+      .mono {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      }
+
+      .eyebrow {
+        margin: 0 0 8px;
+        color: var(--accent);
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      h1,
+      h2,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-weight: 400;
+        max-width: 760px;
+        margin-bottom: 12px;
+        font-size: clamp(28px, 5vw, 44px);
+        line-height: 1.08;
+      }
+
+      h2 {
+        font-size: 18px;
+        line-height: 1.35;
+      }
+
+      .lede {
+        max-width: 760px;
+        margin-bottom: 8px;
+        color: var(--muted);
+        font-size: 16px;
+      }
+
+      .provenance {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.55fr) minmax(280px, 0.75fr);
+        gap: 20px;
+        margin-top: 32px;
+        align-items: start;
+      }
+
+      .card {
+        border: 1px solid var(--border);
+        border-radius: var(--radius-card);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .diagram {
+        padding: 20px;
+        overflow: hidden;
+      }
+
+      .diagram svg {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .diagram-frame {
+        overflow-x: auto;
+      }
+
+      .node rect {
+        fill: var(--surface);
+        stroke: var(--border);
+        stroke-width: 1.5;
+      }
+
+      .node text {
+        fill: var(--text);
+        font: 600 13px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      }
+
+      .connector {
+        fill: none;
+        stroke: var(--muted);
+        stroke-width: 2;
+        marker-end: url(#arrow);
+      }
+
+      [data-motion="flow-hint"] {
+        fill: none;
+        stroke: var(--accent);
+        stroke-width: 3;
+        stroke-linecap: round;
+        stroke-dasharray: 10 180;
+        animation: trace 5s linear infinite;
+        pointer-events: none;
+      }
+
+      .connector-label {
+        fill: var(--muted);
+        font: 500 11px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        paint-order: stroke;
+        stroke: var(--surface);
+        stroke-width: 4px;
+        stroke-linejoin: round;
+      }
+
+      @keyframes trace {
+        to {
+          stroke-dashoffset: -190;
+        }
+      }
+
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 16px;
+      }
+
+      .steps {
+        padding: 20px;
+      }
+
+      .step {
+        padding: 16px 0;
+        border-top: 1px solid var(--border);
+      }
+
+      .step:first-of-type {
+        border-top: 0;
+      }
+
+      .step p:last-child {
+        margin-bottom: 0;
+      }
+
+      .step-label {
+        margin-bottom: 4px;
+        color: var(--accent);
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .is-enhanced .step[data-active="false"] {
+        display: none;
+      }
+
+      .ledger {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 20px;
+      }
+
+      .ledger section {
+        padding: 16px;
+      }
+
+      .ledger p:last-child {
+        margin-bottom: 0;
+        color: var(--muted);
+      }
+
+      .status {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      @media (max-width: 760px) {
+        .page {
+          width: min(100% - 24px, 680px);
+          padding-top: 24px;
+        }
+
+        .layout,
+        .ledger {
+          grid-template-columns: 1fr;
+        }
+
+        .diagram {
+          padding: 12px;
+        }
+
+        .diagram svg {
+          min-width: 560px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+
+        [data-motion="flow-hint"] {
+          display: none;
+        }
+      }
+
+      @media print {
+        :root {
+          color-scheme: light;
+          --background: #faf9f5;
+          --surface: #ffffff;
+          --surface-muted: #f0eee6;
+          --text: #141413;
+          --muted: #3d3d3a;
+          --soft: #87867f;
+          --accent: #788c5d;
+          --border: #d1cfc5;
+          --shadow: none;
+        }
+
+        .page {
+          width: 100%;
+          padding: 0;
+        }
+
+        .layout,
+        .ledger {
+          grid-template-columns: 1fr;
+        }
+
+        .controls,
+        [data-motion="flow-hint"] {
+          display: none !important;
+        }
+
+        .is-enhanced .step[data-active="false"] {
+          display: block;
+        }
+
+        .card {
+          break-inside: avoid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header>
+        <p class="eyebrow">{{ARTIFACT_KIND}}</p>
+        <h1>{{TITLE}}</h1>
+        <p class="lede">{{QUESTION}}</p>
+        <p class="provenance mono">{{PROVENANCE}}</p>
+      </header>
+
+      <div class="layout">
+        <section class="card diagram" aria-labelledby="diagram-heading">
+          <h2 id="diagram-heading">{{DIAGRAM_HEADING}}</h2>
+          <div class="diagram-frame" tabindex="0" aria-label="Scrollable diagram">
+            <svg viewBox="0 0 720 360" role="img" aria-labelledby="diagram-title diagram-description">
+            <title id="diagram-title">{{DIAGRAM_TITLE}}</title>
+            <desc id="diagram-description">{{DIAGRAM_DESCRIPTION}}</desc>
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)" />
+              </marker>
+            </defs>
+
+            <path class="connector" data-connector="evidence" data-label="{{CONNECTOR_1}}" marker-end="url(#arrow)" d="M 180 82 C 240 82, 245 82, 305 82" />
+            <path data-motion="flow-hint" d="M 180 82 C 240 82, 245 82, 305 82" />
+            <text class="connector-label" data-connector-label="evidence" x="243" y="70" text-anchor="middle">{{CONNECTOR_1}}</text>
+            <path class="connector" data-connector="selection" data-label="{{CONNECTOR_2}}" marker-end="url(#arrow)" d="M 415 116 C 415 160, 415 170, 415 214" />
+            <text class="connector-label" data-connector-label="selection" x="430" y="168">{{CONNECTOR_2}}</text>
+            <path class="connector" data-connector="return" data-label="{{CONNECTOR_3}}" marker-end="url(#arrow)" d="M 525 262 C 580 262, 590 262, 645 262" />
+            <text class="connector-label" data-connector-label="return" x="584" y="250" text-anchor="middle">{{CONNECTOR_3}}</text>
+
+            <g class="node" data-node-box="40 48 140 68" transform="translate(40 48)">
+              <rect width="140" height="68" rx="12" />
+              <text x="70" y="40" text-anchor="middle">{{NODE_1}}</text>
+            </g>
+            <g class="node" data-node-box="305 48 220 68" transform="translate(305 48)">
+              <rect width="220" height="68" rx="12" />
+              <text x="110" y="40" text-anchor="middle">{{NODE_2}}</text>
+            </g>
+            <g class="node" data-node-box="305 214 220 96" transform="translate(305 214)">
+              <rect width="220" height="96" rx="12" />
+              <text x="110" y="54" text-anchor="middle">{{NODE_3}}</text>
+            </g>
+            <g class="node" data-node-box="645 228 60 68" transform="translate(645 228)">
+              <rect width="60" height="68" rx="12" />
+              <text x="30" y="40" text-anchor="middle">{{NODE_4}}</text>
+            </g>
+            </svg>
+          </div>
+
+          <div class="controls" aria-label="Diagram walkthrough controls">
+            <button type="button" data-action="previous">Previous</button>
+            <button type="button" data-action="next">Next</button>
+            <button type="button" data-action="play" aria-pressed="false">Play</button>
+            <button type="button" data-action="replay">Replay</button>
+          </div>
+          <p class="status" data-status aria-live="polite"></p>
+        </section>
+
+        <aside class="card steps" aria-labelledby="walkthrough-heading">
+          <h2 id="walkthrough-heading">Walkthrough</h2>
+          <section class="step" data-step data-active="true">
+            <p class="step-label">01</p>
+            <h2>{{STEP_1_TITLE}}</h2>
+            <p>{{STEP_1_BODY}}</p>
+          </section>
+          <section class="step" data-step data-active="false">
+            <p class="step-label">02</p>
+            <h2>{{STEP_2_TITLE}}</h2>
+            <p>{{STEP_2_BODY}}</p>
+          </section>
+          <section class="step" data-step data-active="false">
+            <p class="step-label">03</p>
+            <h2>{{STEP_3_TITLE}}</h2>
+            <p>{{STEP_3_BODY}}</p>
+          </section>
+        </aside>
+      </div>
+
+      <div class="ledger" aria-label="Artifact grounding">
+        <section class="card">
+          <h2>Evidence</h2>
+          <p>{{EVIDENCE}}</p>
+        </section>
+        <section class="card">
+          <h2>Assumptions and omissions</h2>
+          <p>{{ASSUMPTIONS}}</p>
+        </section>
+        <section class="card">
+          <h2>Validation</h2>
+          <p>{{VALIDATION}}</p>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      (() => {
+        const steps = [...document.querySelectorAll("[data-step]")];
+        const status = document.querySelector("[data-status]");
+        const playButton = document.querySelector('[data-action="play"]');
+        const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+        let index = 0;
+        let timer;
+
+        if (!steps.length || !status || !playButton) return;
+        document.documentElement.classList.add("is-enhanced");
+
+        function render(nextIndex) {
+          index = Math.max(0, Math.min(nextIndex, steps.length - 1));
+          steps.forEach((step, stepIndex) => {
+            step.dataset.active = String(stepIndex === index);
+          });
+          status.textContent = `Step ${index + 1} of ${steps.length}: ${steps[index].querySelector("h2")?.textContent ?? ""}`;
+        }
+
+        function stop() {
+          if (timer) clearInterval(timer);
+          timer = undefined;
+          playButton.setAttribute("aria-pressed", "false");
+          playButton.textContent = "Play";
+        }
+
+        function play() {
+          if (reducedMotion.matches) return;
+          if (timer) {
+            stop();
+            return;
+          }
+          playButton.setAttribute("aria-pressed", "true");
+          playButton.textContent = "Pause";
+          timer = setInterval(() => {
+            if (index >= steps.length - 1) {
+              stop();
+              return;
+            }
+            render(index + 1);
+          }, 3200);
+        }
+
+        document.querySelector('[data-action="previous"]')?.addEventListener("click", () => {
+          stop();
+          render(index - 1);
+        });
+        document.querySelector('[data-action="next"]')?.addEventListener("click", () => {
+          stop();
+          render(index + 1);
+        });
+        playButton.addEventListener("click", play);
+        document.querySelector('[data-action="replay"]')?.addEventListener("click", () => {
+          stop();
+          render(0);
+        });
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Home") {
+            stop();
+            render(0);
+          }
+          if (event.key === "End") {
+            stop();
+            render(steps.length - 1);
+          }
+        });
+        document.addEventListener("visibilitychange", () => {
+          if (document.hidden) stop();
+        });
+        reducedMotion.addEventListener("change", stop);
+        render(0);
+      })();
+    </script>
+  </body>
+</html>

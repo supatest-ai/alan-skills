@@ -375,6 +375,14 @@ Repeat for each screenshot and video file. Common MIME types:
 
 If uploads failed in Phase 3, create the report anyway — omit the media URLs but include all steps, issues, and summary text.
 
+After the evidence set is complete and before composing the report, invoke
+`/alan-visual-artifact` only when a tested flow, lifecycle, architecture path,
+coverage relationship, or recovery decision remains hard to understand in the
+structured steps. Give it observed evidence only; never turn pass counts into a
+decorative chart. Include the result only if the current report surface supports
+that format. Otherwise keep the structured report authoritative and record `no
+visual`; do not create or publish a second report.
+
 Call the `mcp__alan__create_test_report` MCP tool with structured data from your testing.
 
 Gather all the data from the previous phases and call the tool:

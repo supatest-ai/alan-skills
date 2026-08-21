@@ -1,0 +1,19 @@
+{
+  "TITLE": "Choose the plan review structure",
+  "QUESTION": "Should reviewers start from a complete evidence overview or move through the decision in a guided sequence?",
+  "PROVENANCE": "representative Alan planning content",
+  "DIRECTION_1": "Overview first",
+  "HYPOTHESIS_1": "Experienced reviewers decide faster when outcome, decision, verification, and visual evidence stay visible together.",
+  "TRADEOFF_1": "Fast scanning, but the first screen carries more simultaneous information.",
+  "DIRECTION_2": "Step first",
+  "HYPOTHESIS_2": "Occasional reviewers gain confidence when the artifact exposes one decision stage at a time.",
+  "TRADEOFF_2": "Clear progression, but cross-checking distant evidence takes another navigation step.",
+  "WORKSPACE_NAME": "Visual artifact primitive",
+  "REVIEW_TITLE": "Approve one installable skill pack",
+  "REVIEW_META": "39 diagram families · one wireframe route · offline validation",
+  "OUTCOME": "Planning, review, testing, and reporting invoke one evidence-backed presentation primitive.",
+  "DECISION": "Publish the full pack through the existing Alan skills repository and keep parent workflows authoritative.",
+  "VERIFICATION": "Structural certificate, browser evidence manifest, focused catalog tests, and current source revision.",
+  "ANNOTATION_1": "Does the overview reveal enough dependency order without becoming a dashboard?",
+  "ANNOTATION_2": "Can reviewers compare evidence across steps without losing their place?"
+}

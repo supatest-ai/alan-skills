@@ -1,6 +1,6 @@
 ---
 name: alan-plan
-version: 1.0.1
+version: 1.1.0
 description: Create an implementation plan artifact in Alan
 ---
 
@@ -53,30 +53,14 @@ and produce a clear, actionable plan in markdown.
    There is NO required format. Good plans are clear, specific, and actionable.
    Include file paths, function names, and reasoning where relevant.
 
-   **Be visual.** Plans render mermaid natively. Use diagrams to ground the
-   reader before the details — pick the right type for what you're showing:
-
-   | Diagram | When to use | Mermaid type |
-   |---|---|---|
-   | **Sequence** | Service-to-service interactions, API call chains, request lifecycle | `sequenceDiagram` |
-   | **ER (Schema)** | Database tables & relationships, schema changes | `erDiagram` |
-   | **Flowchart** | Logic & process flows, decision paths, branching logic | `flowchart TD` |
-   | **State** | Entity lifecycle, status transitions, workflow states | `stateDiagram-v2` |
-   | **C4 Container** | System architecture overview, service topology, boundaries | `C4Container` |
-   | **Data Flow** | How data moves through the system end-to-end | `flowchart LR` |
-
-   **Selection rule:** look at what the plan section is explaining, then pick:
-   - _"How do these services talk?"_ → Sequence
-   - _"What tables change?"_ → ER
-   - _"What's the logic?"_ → Flowchart
-   - _"What states can this be in?"_ → State
-   - _"What's the high-level architecture?"_ → C4 Container
-   - _"How does data flow through?"_ → Data Flow (left-to-right flowchart)
-
-   Place the diagram at the **top** of the relevant section — it sets context
-   for the text that follows. Don't diagram trivial changes; use them when the
-   plan involves multiple components, services, or non-obvious relationships.
-   Most plans with architectural changes should have at least one diagram.
+   **Compose the plan for comprehension.** After the evidence and plan structure
+   are stable, invoke `/alan-visual-artifact` with the plan audience, reader
+   question, verified relationships, supported output formats, and constraints.
+   Accept prose/table or `no visual` when they win. When a visual is earned, put
+   it at the top of the section it explains and preserve the primitive's selected
+   type, evidence ledger, omissions, and validation result. Planning remains the
+   owner of research, decisions, approval, and `create_plan`; the visual primitive
+   must not create or publish a second plan.
 
 4. **Persist** — You MUST call the `mcp__alan__create_plan` MCP tool to save
    your plan. If you skip this, the plan is lost.

@@ -1,6 +1,6 @@
 ---
 name: alan-review-pr
-version: 1.0.0
+version: 1.1.0
 description: Review a GitHub pull request using Alan's GitHub MCP tools
 ---
 
@@ -108,6 +108,13 @@ The user will provide one of:
 9. **Analyze** — identify issues INTRODUCED by this PR only (not pre-existing).
    For each finding, determine: severity, file path, start/end line, title,
    description, and a concrete fix prompt for agents.
+
+   When a cross-file execution path, lifecycle, schema relationship, or system
+   boundary is genuinely difficult to orient from the diff, invoke
+   `/alan-visual-artifact` with the fixed PR head SHA and verified changed-file
+   evidence. Use its result only as optional orientation in the review summary;
+   keep defect findings, severity, inline anchors, and GitHub publication owned
+   by this review. Do not add a decorative visual or publish a separate report.
 
 10. **Post review** — call `mcp__alan__github_create_pr_review` with inline
     comments (one per finding) plus a summary body. See formats below.
