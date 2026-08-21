@@ -25,9 +25,12 @@ jobs:
           set -e
           fail=0
           while IFS= read -r f; do
-            if ! awk '/^---$/{c++} c==1 && /^name:[[:space:]]+[a-z][a-z0-9-]*[[:space:]]*$/{n=1} c==1 && /^description:[[:space:]]+\S/{d=1} END{exit !(n && d)}' "$f"; then
+            if ! awk '/^---$/{c++} c==1 && /^name:[[:space:]]+[a-z][a-z0-9-]*[[:space:]]*$/{n=1} c==1 && /^description:[[:space:]]+[^[:space:]]/{d=1} END{exit !(n && d)}' "$f"; then
               echo "::error file=$f::SKILL.md missing valid lowercase-hyphen name or description"
               fail=1
             fi
           done < <(find skills -name SKILL.md)
           exit $fail
+
+      - name: Validate visual artifact skill pack
+        run: skills/alan-visual-artifact/scripts/validate-skill.sh

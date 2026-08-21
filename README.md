@@ -10,13 +10,13 @@ These skills extend coding agents with the workflows Alan uses internally for pl
 
 ```bash
 # All Alan skills
-npx skills add supatest-ai/aiden-skills
+npx skills add supatest-ai/alan-skills
 
 # A specific skill
-npx skills add supatest-ai/aiden-skills --skill alan-test-feature
+npx skills add supatest-ai/alan-skills --skill alan-test-feature
 
 # List what's in this repo without installing
-npx skills add supatest-ai/aiden-skills --list
+npx skills add supatest-ai/alan-skills --list
 ```
 
 The `npx skills` CLI auto-detects your installed agent (Claude Code, Codex, Cursor, Gemini, OpenCode) and writes skills to the right path.
@@ -38,11 +38,8 @@ Clone this repo and copy the skill directories you want into your agent's skills
 | Skill | What it does |
 |---|---|
 | [`alan-plan`](skills/alan-plan) | Build a clear, persisted implementation plan via codebase analysis and one-question-at-a-time interview. |
-| [`alan-prd`](skills/alan-prd) | Write a Product Requirements Document through structured interview, codebase exploration, and a versioned document artifact. |
-| [`alan-document`](skills/alan-document) | Create structured Alan document artifacts (analyses, RFCs, runbooks, guides) with mermaid diagrams. |
-| [`alan-create-pr`](skills/alan-create-pr) | Push a branch and create a GitHub PR using the Alan GitHub MCP tools. |
+| [`alan-visual-artifact`](skills/alan-visual-artifact) | Select and render evidence-backed diagrams, bounded wireframes, and self-contained interactive HTML for Alan plans, reviews, decisions, and reports. |
 | [`alan-review-pr`](skills/alan-review-pr) | Review a GitHub PR — security, correctness, performance — and post inline comments via Alan's MCP. |
-| [`alan-check-ci`](skills/alan-check-ci) | Check CI/CD status for a branch or PR via Alan's GitHub MCP tools. |
 | [`alan-test-feature`](skills/alan-test-feature) | Test a feature end-to-end with `agent-browser` — captures, S3 upload, structured test report. |
 
 Several of these skills call Alan's MCP server (`mcp__alan__*`) for persisting plans, documents, test reports, and GitHub operations. Without the Alan MCP server installed, the body of each skill is still a useful workflow guide, but the persistence steps will need adapting.
@@ -52,14 +49,14 @@ Several of these skills call Alan's MCP server (`mcp__alan__*`) for persisting p
 This repo follows semantic versioning via git tags (`v0.1.0`, `v0.2.0`, etc.). Pin your install to a tag for stability:
 
 ```bash
-npx skills add supatest-ai/aiden-skills@v0.1.0
+npx skills add supatest-ai/alan-skills@v0.1.0
 ```
 
 Default `main` always reflects the latest published skills.
 
 ## Contributing
 
-Skills here are mirrors of what Alan ships internally. If you'd like to contribute or report an issue, open one at [github.com/supatest-ai/aiden-skills/issues](https://github.com/supatest-ai/aiden-skills/issues).
+Skills here are mirrors of what Alan ships internally. If you'd like to contribute or report an issue, open one at [github.com/supatest-ai/alan-skills/issues](https://github.com/supatest-ai/alan-skills/issues).
 
 ## License
 
