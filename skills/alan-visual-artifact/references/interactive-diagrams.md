@@ -16,6 +16,20 @@ The artifact contains:
 6. a node-detail region outside the SVG;
 7. an evidence ledger and source revision.
 
+Define a visual grammar before placing nodes. Actors, evidence sources, decision
+gates, transformations, stores or records, quality checks, and destinations
+must not become interchangeable rounded boxes. Use shape, border treatment,
+containment, label position, and whitespace before color. Declare node and edge
+kinds in the markup so the grammar can be checked, and use ownership or trust
+zones only when the boundary carries real meaning.
+
+Treat a dense explorer as an interface, not a long document. Prefer a compact
+title and scenario rail, a canvas that receives most of the viewport, subtle
+meaningful zones, and one or two on-demand explanation cards. Do not place a
+large hero, prose introduction, dashboard grid, permanent sidebar, or several
+equally loud panels around the graph. The graph owns the stage; controls and
+detail support it.
+
 Selecting a scenario highlights its declared nodes and connectors. Unrelated
 elements may dim but must not disappear, collapse, or become impossible to
 read. `Everything` restores the complete architecture. Selecting a node reveals
@@ -34,6 +48,16 @@ only pre-authored, evidence-backed detail; it never creates markup from data.
 - One restrained trace may move along the selected path. Static strokes,
   labels, and arrowheads retain the complete meaning when motion is disabled.
 - Stop motion when the document is hidden, under reduced motion, and in print.
+
+Keep the interaction data model separate from presentation: every scenario
+declares its node IDs, connector IDs, name, and pre-authored explanation; every
+node ID maps to pre-authored detail. The renderer applies classes and hidden
+states only. This makes broken paths detectable without executing the page and
+prevents interaction code from inventing content.
+
+Pan and zoom are optional, not signs of sophistication. Add them only when
+inspection at several scales is part of the reader's job. Otherwise prefer a
+stable overview, a contained scroller, and detail on demand.
 
 ## Responsive and print behavior
 

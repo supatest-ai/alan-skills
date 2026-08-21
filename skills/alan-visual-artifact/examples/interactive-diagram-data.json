@@ -1,5 +1,5 @@
 {
   "TITLE": "How one visual primitive serves several workflows",
-  "QUESTION": "Which shared decisions stay inside the visual artifact primitive, and which evidence and lifecycle responsibilities remain with planning, testing, and review?",
+  "QUESTION": "3 workflows · 1 evidence gate · 3 composers · 1 return path",
   "PROVENANCE": "Alan-owned demonstration · independently authored fixture · no external runtime"
 }

@@ -28,13 +28,29 @@ for (const button of buttons) {
 
 const nodeTags = [...html.matchAll(/<g\b[^>]*\sdata-node-id=["']([^"']+)["'][^>]*>/gi)];
 const nodeIds = new Set(nodeTags.map((match) => match[1]));
+const nodeKinds = new Set();
 for (const node of nodeTags) {
   if (!/tabindex=["']0["']/i.test(node[0])) failures.push(`node ${node[1]} is not keyboard focusable`);
   if (!/role=["']button["']/i.test(node[0])) failures.push(`node ${node[1]} lacks button role`);
   if (!/aria-label=["'][^"']+["']/i.test(node[0])) failures.push(`node ${node[1]} lacks an accessible label`);
+  const nodeKind = node[0].match(/data-node-kind=["']([^"']+)["']/i)?.[1];
+  if (!nodeKind) failures.push(`node ${node[1]} lacks a semantic node kind`);
+  else nodeKinds.add(nodeKind);
   if (!new RegExp(`data-node-copy=["']${node[1].replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']`, "i").test(html)) failures.push(`node ${node[1]} lacks external detail copy`);
 }
-const edgeIds = new Set([...html.matchAll(/\sdata-connector=["']([^"']+)["']/gi)].map((match) => match[1]));
+if (nodeKinds.size < 4) failures.push(`interactive architecture needs at least four semantic node kinds, found ${nodeKinds.size}`);
+const zones = [...html.matchAll(/\sdata-zone=["']([^"']+)["']/gi)].map((match) => match[1]);
+if (zones.length < 2 || zones.length > 8) failures.push(`expected two to eight meaningful zones, found ${zones.length}`);
+for (const zone of zones) if (!new RegExp(`data-zone-label=["']${zone.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']`, "i").test(html)) failures.push(`zone ${zone} lacks a visible label`);
+const edgeTags = [...html.matchAll(/<(?:path|line|polyline)\b[^>]*\sdata-connector=["']([^"']+)["'][^>]*>/gi)];
+const edgeIds = new Set(edgeTags.map((match) => match[1]));
+const edgeKinds = new Set();
+for (const edge of edgeTags) {
+  const edgeKind = edge[0].match(/data-edge-kind=["']([^"']+)["']/i)?.[1];
+  if (!edgeKind) failures.push(`edge ${edge[1]} lacks a semantic edge kind`);
+  else edgeKinds.add(edgeKind);
+}
+if (edgeKinds.size < 3) failures.push(`interactive architecture needs at least three semantic edge kinds, found ${edgeKinds.size}`);
 for (const button of buttons) {
   const nodeRefs = button[0].match(/\sdata-flow-nodes=["']([^"']+)["']/i)?.[1].trim().split(/\s+/) ?? [];
   const edgeRefs = button[0].match(/\sdata-flow-edges=["']([^"']+)["']/i)?.[1].trim().split(/\s+/) ?? [];
@@ -43,8 +59,8 @@ for (const button of buttons) {
   if (!new RegExp(`data-flow-copy=["']${button[1].replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']`, "i").test(html)) failures.push(`flow ${button[1]} lacks external explanation copy`);
 }
 
-if (!/data-flow-panel/i.test(html)) failures.push("missing external flow explanation panel");
-if (!/data-node-panel/i.test(html)) failures.push("missing external node detail panel");
+if (!/<(?:section|aside|div)\b[^>]*\sdata-flow-panel(?:\s|>)/i.test(html)) failures.push("missing external flow explanation panel");
+if (!/<(?:section|aside|div)\b[^>]*\sdata-node-panel(?:\s|>)/i.test(html)) failures.push("missing external node detail panel");
 if (!/event\.key\s*===\s*["']Enter["'][\s\S]*?event\.key\s*===\s*["'] ["']/i.test(html)) failures.push("node activation lacks Enter and Space support");
 if (!/addEventListener\(["']click["']/i.test(html)) failures.push("interactive diagram has no click behavior");
 if (!/\.textContent\s*=/i.test(html)) failures.push("interactive updates do not use safe textContent");

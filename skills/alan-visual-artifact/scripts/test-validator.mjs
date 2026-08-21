@@ -147,6 +147,16 @@ if (interactiveFixturePath) {
       validator: "validate-interactive-diagram.mjs",
       html: interactive.replace(" data-flow-panel", ""),
     },
+    {
+      name: "interactive diagram missing semantic node kind",
+      validator: "validate-interactive-diagram.mjs",
+      html: interactive.replace(' data-node-kind="source"', ""),
+    },
+    {
+      name: "interactive diagram missing zone label",
+      validator: "validate-interactive-diagram.mjs",
+      html: interactive.replace(' data-zone-label="parent-evidence"', ""),
+    },
   );
 }
 
