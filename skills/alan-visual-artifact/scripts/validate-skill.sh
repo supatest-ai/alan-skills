@@ -30,12 +30,25 @@ for required_file in \
   references/diagram-catalog.md \
   references/composition.md \
   references/rendering.md \
+  references/theming.md \
+  references/wireframing.md \
+  references/certification.md \
+  references/example-patterns.md \
   templates/artifact.html \
+  templates/wireframe.html \
   examples/demo-data.json \
+  examples/wireframe-data.json \
   examples/design-graph.md \
   examples/evals.md \
   scripts/render-demo.mjs \
+  scripts/render-wireframe-demo.mjs \
+  scripts/certify-artifact.mjs \
   scripts/validate-artifact.mjs \
+  scripts/validate-theme.mjs \
+  scripts/validate-diagram.mjs \
+  scripts/validate-motion.mjs \
+  scripts/validate-wireframe.mjs \
+  scripts/test-certifier.mjs \
   scripts/test-validator.mjs; do
   if [[ ! -f "$skill_root/$required_file" ]]; then
     printf '%s\n' "Missing required skill-pack file: $required_file" >&2
@@ -56,7 +69,7 @@ if find "$skill_root" -type f \( -name 'openai.yaml' -o -name 'plugin.json' -o -
 fi
 
 if rg -n -i '(https?:)?//|npx skills|curl .*(upload|share|publish)|guides\.show' \
-  "$skill_root/templates" "$skill_root/scripts/render-demo.mjs"; then
+  "$skill_root/templates" "$skill_root/scripts/render-demo.mjs" "$skill_root/scripts/render-wireframe-demo.mjs"; then
   printf '%s\n' "Template or renderer contains an external dependency or publication path" >&2
   exit 1
 fi
@@ -75,17 +88,33 @@ fi
 temporary_directory="$(mktemp -d "${TMPDIR:-/tmp}/alan-visual-artifact.XXXXXX")"
 trap 'rm -rf "$temporary_directory"' EXIT
 demo_path="$temporary_directory/demo.html"
+wireframe_path="$temporary_directory/wireframe.html"
+diagram_certificate="$temporary_directory/diagram.certificate.json"
+wireframe_certificate="$temporary_directory/wireframe.certificate.json"
 
 printf '%s\n' "Rendering and validating the self-contained fixture"
 node "$skill_root/scripts/render-demo.mjs" "$demo_path" >/dev/null
-node "$skill_root/scripts/validate-artifact.mjs" "$demo_path"
-node "$skill_root/scripts/test-validator.mjs" "$demo_path"
+node "$skill_root/scripts/render-wireframe-demo.mjs" "$wireframe_path" >/dev/null
+node "$skill_root/scripts/certify-artifact.mjs" "$demo_path" --profile diagram --output "$diagram_certificate" >/dev/null
+node "$skill_root/scripts/certify-artifact.mjs" "$wireframe_path" --profile wireframe --output "$wireframe_certificate" >/dev/null
+node "$skill_root/scripts/test-validator.mjs" "$demo_path" "$wireframe_path"
+node "$skill_root/scripts/test-certifier.mjs" "$demo_path" "$wireframe_path"
 
 printf '%s\n' "Checking scripts and JSON fixtures"
 bash -n "$skill_root/scripts/validate-skill.sh"
 node --check "$skill_root/scripts/render-demo.mjs"
+node --check "$skill_root/scripts/render-wireframe-demo.mjs"
+node --check "$skill_root/scripts/certify-artifact.mjs"
 node --check "$skill_root/scripts/validate-artifact.mjs"
+node --check "$skill_root/scripts/validate-theme.mjs"
+node --check "$skill_root/scripts/validate-diagram.mjs"
+node --check "$skill_root/scripts/validate-motion.mjs"
+node --check "$skill_root/scripts/validate-wireframe.mjs"
 node --check "$skill_root/scripts/test-validator.mjs"
+node --check "$skill_root/scripts/test-certifier.mjs"
 node -e 'JSON.parse(require("node:fs").readFileSync(process.argv[1], "utf8"))' "$skill_root/examples/demo-data.json"
+node -e 'JSON.parse(require("node:fs").readFileSync(process.argv[1], "utf8"))' "$skill_root/examples/wireframe-data.json"
+node -e 'const c=JSON.parse(require("node:fs").readFileSync(process.argv[1],"utf8"));if(c.level!=="structural")process.exit(1)' "$diagram_certificate"
+node -e 'const c=JSON.parse(require("node:fs").readFileSync(process.argv[1],"utf8"));if(c.level!=="structural")process.exit(1)' "$wireframe_certificate"
 
 printf '%s\n' "alan-visual-artifact validation complete"

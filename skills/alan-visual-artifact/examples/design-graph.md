@@ -19,7 +19,7 @@ The POC does not modify Alan application components, so this graph scopes the st
 
 ## Collapsed axes
 
-- Theme selection is deleted: the artifact follows Alan light/dark presentation automatically.
+- Theme selection is deleted: the artifact follows the editorial light/dark presentation automatically.
 - Loading/error/retry is deleted: the document has no remote runtime.
 - Arbitrary layout modes are deleted: the template has one wide and one narrow reading order.
 - Multiple animation styles are deleted: only one optional directional trace and one controlled step mode remain.

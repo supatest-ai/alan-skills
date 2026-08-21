@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en" data-artifact-profile="wireframe" data-artifact-theme="editorial">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{TITLE}}</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: "Avenir Next", "Segoe UI", Helvetica, Arial, sans-serif;
+        --paper: #f5f5f5;
+        --panel: #ffffff;
+        --ink: #2d3142;
+        --muted: #4f5d75;
+        --line: #bfc0c0;
+        --soft: #ececec;
+        --focus: #eb6c36;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --paper: #2d3142;
+          --panel: #393e53;
+          --ink: #f5f5f5;
+          --muted: #bfc0c0;
+          --line: rgba(191, 192, 192, 0.25);
+          --soft: rgba(245, 245, 245, 0.06);
+          --focus: #f08a59;
+        }
+      }
+
+      :root[data-theme="light"] {
+        color-scheme: light;
+        --paper: #f5f5f5;
+        --panel: #ffffff;
+        --ink: #2d3142;
+        --muted: #4f5d75;
+        --line: #bfc0c0;
+        --soft: #ececec;
+        --focus: #eb6c36;
+      }
+
+      :root[data-theme="dark"] {
+        color-scheme: dark;
+        --paper: #2d3142;
+        --panel: #393e53;
+        --ink: #f5f5f5;
+        --muted: #bfc0c0;
+        --line: rgba(191, 192, 192, 0.25);
+        --soft: rgba(245, 245, 245, 0.06);
+        --focus: #f08a59;
+      }
+
+      * { box-sizing: border-box; }
+      body { margin: 0; color: var(--ink); background: var(--paper); font-size: 15px; line-height: 1.45; }
+      button { min-height: 44px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 4px; color: var(--ink); background: var(--panel); font: inherit; }
+      button[aria-selected="true"] { border-width: 2px; background: var(--soft); font-weight: 650; }
+      button:focus-visible, [tabindex]:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+      h1, h2, h3, p { margin-top: 0; }
+      h1 { max-width: 780px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(28px, 5vw, 42px); font-weight: 400; line-height: 1.1; }
+      h2 { font-size: 20px; }
+      h3 { font-size: 15px; }
+      .page { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 32px 0 56px; }
+      .lede { max-width: 780px; color: var(--muted); font-size: 17px; }
+      .meta { color: var(--muted); font-size: 13px; }
+      .direction-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0; }
+      .direction { padding: 20px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); }
+      .direction + .direction { margin-top: 20px; }
+      .direction-header { display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, 0.45fr); gap: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+      .tradeoff { padding: 12px; border: 1px dashed var(--line); background: var(--paper); }
+      .frame { display: grid; grid-template-columns: 220px minmax(0, 1fr); min-height: 460px; margin-top: 18px; border: 1px solid var(--ink); background: var(--panel); }
+      .rail { padding: 16px; border-right: 1px solid var(--line); background: var(--soft); }
+      .rail ul { padding: 0; margin: 16px 0 0; list-style: none; }
+      .rail li { padding: 9px 0; border-top: 1px solid var(--line); }
+      .workspace { padding: 20px; }
+      .workspace-bar { display: flex; justify-content: space-between; gap: 16px; align-items: start; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+      .blocks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 16px; }
+      .block { min-height: 110px; padding: 14px; border: 1px solid var(--line); background: var(--paper); }
+      .block.wide { grid-column: 1 / -1; }
+      .placeholder { min-height: 86px; display: grid; place-items: center; border: 1px dashed var(--muted); color: var(--muted); text-align: center; }
+      .annotation { margin: 16px 0 0; padding: 12px; border-left: 4px solid var(--ink); background: var(--soft); }
+      .step-frame { display: grid; grid-template-columns: minmax(180px, 0.42fr) minmax(0, 1fr); min-height: 460px; margin-top: 18px; border: 1px solid var(--ink); background: var(--panel); }
+      .steps { padding: 16px; border-right: 1px solid var(--line); }
+      .steps ol { padding-left: 22px; }
+      .steps li { padding: 9px 0; }
+      .step-workspace { padding: 20px; }
+      .decision-row { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: start; padding: 14px 0; border-top: 1px solid var(--line); }
+      .decision-row:first-of-type { border-top: 0; }
+      .wire-action { display: inline-block; padding: 8px 12px; border: 1px solid var(--ink); border-radius: 3px; background: var(--soft); font-weight: 600; }
+      .status { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+      .is-enhanced [data-direction][hidden] { display: none; }
+
+      @media (max-width: 700px) {
+        .page { width: min(100% - 20px, 620px); padding-top: 20px; }
+        .direction { padding: 12px; }
+        .direction-header, .frame, .step-frame { grid-template-columns: 1fr; }
+        .rail, .steps { border-right: 0; border-bottom: 1px solid var(--line); }
+        .blocks { grid-template-columns: 1fr; }
+        .block.wide { grid-column: auto; }
+        .workspace-bar, .decision-row { grid-template-columns: 1fr; display: grid; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * { scroll-behavior: auto !important; }
+      }
+
+      @media print {
+        :root {
+          color-scheme: light;
+          --paper: #f5f5f5;
+          --panel: #ffffff;
+          --ink: #2d3142;
+          --muted: #4f5d75;
+          --line: #bfc0c0;
+          --soft: #ececec;
+          --focus: #eb6c36;
+        }
+        .page { width: 100%; padding: 0; }
+        .direction-tabs, .status { display: none; }
+        .is-enhanced [data-direction][hidden] { display: block !important; }
+        .direction { break-inside: avoid; margin-top: 16px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header>
+        <p class="meta">Alan structural decision wireframe · {{PROVENANCE}}</p>
+        <h1>{{TITLE}}</h1>
+        <p class="lede">{{QUESTION}}</p>
+      </header>
+
+      <nav class="direction-tabs" role="tablist" aria-label="Wireframe directions">
+        <button id="tab-overview" type="button" role="tab" aria-selected="true" aria-controls="overview-first">{{DIRECTION_1}}</button>
+        <button id="tab-steps" type="button" role="tab" aria-selected="false" aria-controls="step-first">{{DIRECTION_2}}</button>
+      </nav>
+      <p class="status" aria-live="polite" data-status></p>
+
+      <section id="overview-first" class="direction" data-direction="overview-first" aria-labelledby="tab-overview">
+        <div class="direction-header">
+          <div>
+            <h2>{{DIRECTION_1}}</h2>
+            <p>{{HYPOTHESIS_1}}</p>
+          </div>
+          <aside class="tradeoff"><strong>Tradeoff</strong><br />{{TRADEOFF_1}}</aside>
+        </div>
+        <div class="frame">
+          <aside class="rail" data-requirement="context">
+            <strong>{{WORKSPACE_NAME}}</strong>
+            <ul>
+              <li>Summary</li>
+              <li>Evidence</li>
+              <li>Decisions</li>
+              <li>Validation</li>
+            </ul>
+          </aside>
+          <article class="workspace">
+            <div class="workspace-bar" data-requirement="actions">
+              <div><h3>{{REVIEW_TITLE}}</h3><p class="meta">{{REVIEW_META}}</p></div>
+              <span class="wire-action">Approve or request revision</span>
+            </div>
+            <div class="blocks" data-requirement="decision">
+              <article class="block wide"><h3>Outcome</h3><p>{{OUTCOME}}</p></article>
+              <article class="block"><h3>Architecture decision</h3><p>{{DECISION}}</p></article>
+              <article class="block"><h3>Verification</h3><p>{{VERIFICATION}}</p></article>
+              <article class="block wide"><h3>Visual evidence</h3><div class="placeholder">Diagram or evidence capture occupies this structural region</div></article>
+            </div>
+          </article>
+        </div>
+        <p class="annotation" data-annotation><strong>Open question:</strong> {{ANNOTATION_1}}</p>
+      </section>
+
+      <section id="step-first" class="direction" data-direction="step-first" aria-labelledby="tab-steps">
+        <div class="direction-header">
+          <div>
+            <h2>{{DIRECTION_2}}</h2>
+            <p>{{HYPOTHESIS_2}}</p>
+          </div>
+          <aside class="tradeoff"><strong>Tradeoff</strong><br />{{TRADEOFF_2}}</aside>
+        </div>
+        <div class="step-frame">
+          <aside class="steps" data-requirement="context">
+            <strong>{{WORKSPACE_NAME}}</strong>
+            <ol>
+              <li>Understand outcome</li>
+              <li>Inspect evidence</li>
+              <li>Resolve decisions</li>
+              <li>Approve or revise</li>
+            </ol>
+          </aside>
+          <article class="step-workspace">
+            <div class="workspace-bar" data-requirement="actions">
+              <div><h3>{{REVIEW_TITLE}}</h3><p class="meta">{{REVIEW_META}}</p></div>
+              <span class="wire-action">Continue to decision</span>
+            </div>
+            <div data-requirement="decision">
+              <div class="decision-row"><div><h3>Outcome</h3><p>{{OUTCOME}}</p></div><strong>1 of 4</strong></div>
+              <div class="decision-row"><div><h3>Architecture decision</h3><p>{{DECISION}}</p></div><strong>Needs review</strong></div>
+              <div class="decision-row"><div><h3>Verification</h3><p>{{VERIFICATION}}</p></div><strong>Evidence linked</strong></div>
+            </div>
+          </article>
+        </div>
+        <p class="annotation" data-annotation><strong>Open question:</strong> {{ANNOTATION_2}}</p>
+      </section>
+    </main>
+
+    <script>
+      (() => {
+        const tabs = [...document.querySelectorAll('[role="tab"]')];
+        const panels = [...document.querySelectorAll("[data-direction]")];
+        const status = document.querySelector("[data-status]");
+        if (tabs.length < 2 || panels.length !== tabs.length || !status) return;
+        document.documentElement.classList.add("is-enhanced");
+
+        function select(nextIndex, moveFocus = false) {
+          const index = (nextIndex + tabs.length) % tabs.length;
+          tabs.forEach((tab, tabIndex) => tab.setAttribute("aria-selected", String(tabIndex === index)));
+          panels.forEach((panel, panelIndex) => { panel.hidden = panelIndex !== index; });
+          status.textContent = `Showing ${tabs[index].textContent}`;
+          if (moveFocus) tabs[index].focus();
+        }
+
+        tabs.forEach((tab, index) => {
+          tab.addEventListener("click", () => select(index));
+          tab.addEventListener("keydown", (event) => {
+            if (event.key === "ArrowRight") select(index + 1, true);
+            if (event.key === "ArrowLeft") select(index - 1, true);
+            if (event.key === "Home") select(0, true);
+            if (event.key === "End") select(tabs.length - 1, true);
+          });
+        });
+        select(0);
+      })();
+    </script>
+  </body>
+</html>

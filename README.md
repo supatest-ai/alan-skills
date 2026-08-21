@@ -38,7 +38,7 @@ Clone this repo and copy the skill directories you want into your agent's skills
 | Skill | What it does |
 |---|---|
 | [`alan-plan`](skills/alan-plan) | Build a clear, persisted implementation plan via codebase analysis and one-question-at-a-time interview. |
-| [`alan-visual-artifact`](skills/alan-visual-artifact) | Select and render evidence-backed diagrams, bounded wireframes, and self-contained interactive HTML for Alan plans, reviews, decisions, and reports. |
+| [`alan-visual-artifact`](skills/alan-visual-artifact) | Select and render evidence-backed diagrams, bounded wireframes, and self-contained interactive HTML with a fixed editorial light/dark theme and structural or browser-backed certification. |
 | [`alan-review-pr`](skills/alan-review-pr) | Review a GitHub PR — security, correctness, performance — and post inline comments via Alan's MCP. |
 | [`alan-test-feature`](skills/alan-test-feature) | Test a feature end-to-end with `agent-browser` — captures, S3 upload, structured test report. |
 

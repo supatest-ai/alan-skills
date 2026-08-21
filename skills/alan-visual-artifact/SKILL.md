@@ -1,7 +1,7 @@
 ---
 name: alan-visual-artifact
 description: "This skill should be used when an existing Alan workflow must \"create a rich visual plan\", \"render an interactive HTML artifact\", \"choose the right diagram\", or \"visualize a decision or report\". Do not use for ordinary prose responses, decorative charts, full product UI implementation, or external artifact publishing."
-version: 1.0.0
+version: 1.2.0
 ---
 
 # Alan Visual Artifact
@@ -18,7 +18,7 @@ It is one skill pack. Diagram selection, diagram construction, plan/report compo
 - Do not create a decorative progress chart, pass/fail donut, invented metric, or diagram without grounded relationships.
 - Do not use this primitive to implement a production interface. A wireframe may compare unresolved information architecture, navigation, or task flow only.
 - Do not upload, share, publish, or fetch rendering dependencies from an external service. The owning Alan workflow persists the result through its existing website and artifact APIs.
-- Do not ask the user to choose a theme. Apply Alan's artifact presentation contract automatically.
+- Do not ask the user to choose a theme. Apply the fixed editorial artifact presentation contract automatically.
 - Do not silently repair missing evidence by inventing nodes, fields, owners, dates, cardinality, status, or coverage.
 
 ## Inputs
@@ -75,6 +75,10 @@ For a diagram, choose one dominant information axis and one canonical type. If t
 
 After choosing a diagram, read [references/diagram-catalog.md](references/diagram-catalog.md) and apply only the selected type's construction and validation rules. Do not load or imitate unrelated diagram grammars.
 
+When the selected grammar is unfamiliar, read its independently authored
+micro-example in [references/example-patterns.md](references/example-patterns.md).
+Examples teach semantic structure, not a reusable composition or palette.
+
 ### 4. Compose for the workflow
 
 Read [references/composition.md](references/composition.md) and use only the section matching the parent context.
@@ -99,9 +103,18 @@ Use the least powerful interaction that solves the reading problem:
 
 Do not animate layout, semantic labels, data values, pass/fail meaning, or connector geometry. Hide decorative motion under reduced motion and in print. Ensure the complete meaning remains visible without JavaScript.
 
-### 6. Render in Alan's artifact contract
+For a wireframe, read [references/wireframing.md](references/wireframing.md).
+Keep it visibly low fidelity, use representative product language, compare at
+most three structurally different directions, and implement only the
+navigation, disclosure, or short task flow needed for the decision.
 
-Read [references/rendering.md](references/rendering.md). Use Markdown and Mermaid when the parent artifact surface supports them and they remain readable. Use self-contained HTML/SVG only when custom layout or bounded interaction materially improves understanding.
+### 6. Render in the editorial artifact contract
+
+Read [references/rendering.md](references/rendering.md) and
+[references/theming.md](references/theming.md). Use Markdown and Mermaid when
+the parent artifact surface supports them and they remain readable. Use
+self-contained HTML/SVG only when custom layout or bounded interaction
+materially improves understanding.
 
 For HTML artifacts:
 
@@ -110,7 +123,8 @@ For HTML artifacts:
 3. Use semantic HTML and an accessible heading order.
 4. Give every meaningful SVG a title and description.
 5. Keep all CSS and JavaScript inline.
-6. Use Alan's fixed light/dark artifact tokens; do not offer theme variants.
+6. Use the fixed editorial light/dark artifact tokens; do not offer theme variants,
+   solicit a palette, or introduce unapproved colors.
 7. Keep the static document complete before enhancement.
 8. Add controls only for interaction that the question requires.
 9. Include narrow, wide, reduced-motion, and print behavior.
@@ -119,11 +133,21 @@ Never load external scripts, styles, fonts, images, iframes, or renderers. Never
 
 ### 7. Validate before returning
 
-Resolve supporting paths relative to the directory containing this `SKILL.md`. For HTML, run:
+Resolve supporting paths relative to the directory containing this `SKILL.md`.
+Read [references/certification.md](references/certification.md). For HTML, run
+the profile-aware certificate:
 
 ```bash
-node "<skill-directory>/scripts/validate-artifact.mjs" <artifact.html>
+node "<skill-directory>/scripts/certify-artifact.mjs" <artifact.html> \
+  --profile <artifact|diagram|wireframe> \
+  --output <artifact.certificate.json>
 ```
+
+The structural certificate is mandatory. When browser tooling is available,
+also test wide, narrow, keyboard, reduced-motion, print, overflow, and console
+states, save the evidence manifest described in the certification reference,
+and rerun with `--browser-evidence <evidence.json>`. Do not describe a
+structural-only result as visually certified.
 
 For every format, confirm:
 
@@ -158,6 +182,9 @@ Let the parent workflow persist the result as an Alan plan or artifact. Do not c
 - **Interactive output is incomplete without JavaScript.** Remove the enhancement or restructure the document so the static state contains every node, relationship, conclusion, and decision.
 - **The source revision changed during authoring.** Mark the draft stale, refresh the changed evidence, and rerun validation before persistence.
 - **The parent cannot persist HTML safely.** Return Markdown, Mermaid, or a static SVG supported by that parent. Do not publish elsewhere.
+- **Browser certification is unavailable.** Return the structural certificate,
+  mark browser and visual gates `not-run`, and name the unverified layout and
+  interaction risks. Source inspection is not a substitute for rendered proof.
 
 ## Artifacts
 

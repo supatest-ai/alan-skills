@@ -61,15 +61,20 @@ rejectPattern("external stylesheet", /<link\s+[^>]*rel=["']stylesheet["']/i);
 rejectPattern("CSS import", /@import\s+(?:url\s*\()?\s*["']?(?:https?:|\/\/)/i);
 rejectPattern("external CSS resource", /url\s*\(\s*["']?(?:https?:|\/\/)/i);
 rejectPattern("embedded remote-capable element", /<(?:iframe|object|embed|video|audio)(?:\s|>)/i);
+rejectPattern("SVG foreign content", /<foreignObject(?:\s|>)/i);
 rejectPattern("base URL override", /<base(?:\s|>)/i);
 rejectPattern("metadata redirect", /<meta\s+[^>]*http-equiv=["']refresh["']/i);
 rejectPattern("form", /<form(?:\s|>)/i);
 rejectPattern("network API", /\b(?:fetch|XMLHttpRequest|WebSocket|EventSource|sendBeacon)\s*\(/);
 rejectPattern("browser persistence", /\b(?:localStorage|sessionStorage|indexedDB|serviceWorker|caches)\b/);
 rejectPattern("dynamic evaluation", /\b(?:eval|Function)\s*\(/);
+rejectPattern("worker execution", /\b(?:Worker|SharedWorker)\s*\(/);
 rejectPattern("markup injection", /\.(?:innerHTML|outerHTML)\s*=/);
 rejectPattern("popup", /\bwindow\.open\s*\(/);
 rejectPattern("parent navigation", /\b(?:parent|top)\.location\b/);
+rejectPattern("script URL", /(?:src|href)\s*=\s*["']\s*(?:javascript:|data:text\/html)/i);
+rejectPattern("download capability", /\sdownload(?:\s|=|>)/i);
+rejectPattern("legacy CSS execution", /(?:expression\s*\(|[;{]\s*behavior\s*:)/i);
 rejectPattern("inline event handler", /\son[a-z]+\s*=/i);
 
 if (failures.length > 0) {

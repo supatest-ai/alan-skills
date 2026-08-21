@@ -4,19 +4,22 @@ Use this reference only after the primitive has selected HTML/SVG.
 
 ## Fixed visual language
 
-Use the existing Alan artifact identity automatically:
+The complete token contract and override order live in
+[`theming.md`](theming.md). That contract is normative; this section is the
+short rendering reminder.
 
-- background: `#FAFAFA` light, `#0A0A0A` dark;
-- elevated surface: `#FFFFFF` light, `#141414` dark;
-- text: `#0A0A0A` light, `#FAFAFA` dark;
-- muted text: `#666666` light, `#8C8C8C` dark;
-- primary/focus: `#2B22D3` light, `#5750E2` dark;
-- border: `#D9D9D9` light, `#2E2E2E` dark;
-- danger: `#D31212`; success: `#209752`; warning: `#9B6508`; info: `#0B6FEA`.
+Use the artifact pack's own cool-paper light state and deep-charcoal dark state.
+This is deliberately independent from Alan's Electron and product-interface
+design system. Use a restrained system serif for document titles, system sans
+for reading and labels, and system mono for paths, code, IDs, and technical
+values. Do not download fonts. Use 4px spacing increments, compact radii,
+neutral shadows, and the warm accent on at most one focal path or decision.
 
-Use Inter/system sans for body and headings and JetBrains Mono/system monospace for paths, code, IDs, and technical values. Do not download fonts. Use 4px spacing increments, 12px controls, 16px cards, neutral shadows, and purple only for primary actions, focus, selection, or one focal path.
-
-Do not expose palettes, themes, skins, style selectors, brand variants, or creative-direction questions.
+Do not expose palettes, skins, theme selectors, brand variants, or
+creative-direction questions. The artifact supports exactly two presentation
+states—editorial light and editorial dark—selected by the host's `data-theme`
+attribute or the operating-system preference. They are states of one artifact
+theme, not agent-selectable visual directions.
 
 ## Document structure
 
@@ -87,4 +90,6 @@ The complete semantic result must exist in every state. Interaction may change e
 
 ## Self-contained template
 
-Start from `templates/artifact.html`. Replace all placeholders and delete unused sections. The template contains no external assets or publishing hooks. Run `node scripts/validate-artifact.mjs <path>` after composition.
+Start from `templates/artifact.html`. Replace all placeholders and delete unused
+sections. The template contains no external assets or publishing hooks. Run the
+profile certificate from the parent `SKILL.md`; it includes the theme validator.

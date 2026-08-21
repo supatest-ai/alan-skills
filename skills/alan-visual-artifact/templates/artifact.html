@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-artifact-theme="editorial">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -7,33 +7,78 @@
     <title>{{TITLE}}</title>
     <style>
       :root {
-        --background: #fafafa;
+        --background: #f5f5f5;
         --surface: #ffffff;
-        --surface-muted: #f2f2f2;
-        --text: #0a0a0a;
-        --muted: #666666;
-        --primary: #2b22d3;
-        --border: #d9d9d9;
-        --success: #209752;
-        --warning: #9b6508;
-        --shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
-        --radius-control: 12px;
-        --radius-card: 16px;
+        --surface-muted: #ececec;
+        --text: #2d3142;
+        --muted: #4f5d75;
+        --soft: #7a8399;
+        --accent: #eb6c36;
+        --accent-foreground: #2d3142;
+        --border: #bfc0c0;
+        --success: #7c8f6f;
+        --warning: #b8915a;
+        --danger: #9c6b50;
+        --info: #5e7a9b;
+        --shadow: 0 10px 22px rgba(45, 49, 66, 0.12);
+        --radius-control: 6px;
+        --radius-card: 12px;
         color-scheme: light dark;
-        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-family: "Avenir Next", "Segoe UI", Helvetica, Arial, sans-serif;
       }
 
       @media (prefers-color-scheme: dark) {
         :root {
-          --background: #0a0a0a;
-          --surface: #141414;
-          --surface-muted: #1f1f1f;
-          --text: #fafafa;
-          --muted: #8c8c8c;
-          --primary: #5750e2;
-          --border: #2e2e2e;
+          --background: #2d3142;
+          --surface: #393e53;
+          --surface-muted: rgba(245, 245, 245, 0.06);
+          --text: #f5f5f5;
+          --muted: #bfc0c0;
+          --soft: #8e98ac;
+          --accent: #f08a59;
+          --accent-foreground: #2d3142;
+          --border: rgba(191, 192, 192, 0.25);
+          --success: #9caf8f;
+          --warning: #d3ad7a;
+          --danger: #b88670;
+          --info: #82a0c0;
           --shadow: 0 10px 22px rgba(0, 0, 0, 0.32);
         }
+      }
+
+      :root[data-theme="light"] {
+        --background: #f5f5f5;
+        --surface: #ffffff;
+        --surface-muted: #ececec;
+        --text: #2d3142;
+        --muted: #4f5d75;
+        --soft: #7a8399;
+        --accent: #eb6c36;
+        --accent-foreground: #2d3142;
+        --border: #bfc0c0;
+        --success: #7c8f6f;
+        --warning: #b8915a;
+        --danger: #9c6b50;
+        --info: #5e7a9b;
+        color-scheme: light;
+      }
+
+      :root[data-theme="dark"] {
+        --background: #2d3142;
+        --surface: #393e53;
+        --surface-muted: rgba(245, 245, 245, 0.06);
+        --text: #f5f5f5;
+        --muted: #bfc0c0;
+        --soft: #8e98ac;
+        --accent: #f08a59;
+        --accent-foreground: #2d3142;
+        --border: rgba(191, 192, 192, 0.25);
+        --success: #9caf8f;
+        --warning: #d3ad7a;
+        --danger: #b88670;
+        --info: #82a0c0;
+        --shadow: 0 10px 22px rgba(0, 0, 0, 0.32);
+        color-scheme: dark;
       }
 
       * {
@@ -70,14 +115,14 @@
 
       button:focus-visible,
       [tabindex]:focus-visible {
-        outline: 2px solid var(--primary);
+        outline: 2px solid var(--accent);
         outline-offset: 2px;
       }
 
       button[aria-pressed="true"] {
-        color: #fafafa;
-        border-color: var(--primary);
-        background: var(--primary);
+        color: var(--accent-foreground);
+        border-color: var(--accent);
+        background: var(--accent);
       }
 
       .page {
@@ -88,12 +133,12 @@
 
       .eyebrow,
       .mono {
-        font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       }
 
       .eyebrow {
         margin: 0 0 8px;
-        color: var(--primary);
+        color: var(--accent);
         font-size: 12px;
         font-weight: 600;
       }
@@ -105,6 +150,8 @@
       }
 
       h1 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-weight: 400;
         max-width: 760px;
         margin-bottom: 12px;
         font-size: clamp(28px, 5vw, 44px);
@@ -166,7 +213,7 @@
 
       .node text {
         fill: var(--text);
-        font: 600 13px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font: 600 13px "Avenir Next", "Segoe UI", Helvetica, Arial, sans-serif;
       }
 
       .connector {
@@ -176,14 +223,23 @@
         marker-end: url(#arrow);
       }
 
-      .flow-trace {
+      [data-motion="flow-hint"] {
         fill: none;
-        stroke: var(--primary);
+        stroke: var(--accent);
         stroke-width: 3;
         stroke-linecap: round;
         stroke-dasharray: 10 180;
         animation: trace 5s linear infinite;
         pointer-events: none;
+      }
+
+      .connector-label {
+        fill: var(--muted);
+        font: 500 11px "Avenir Next", "Segoe UI", Helvetica, Arial, sans-serif;
+        paint-order: stroke;
+        stroke: var(--surface);
+        stroke-width: 4px;
+        stroke-linejoin: round;
       }
 
       @keyframes trace {
@@ -218,7 +274,7 @@
 
       .step-label {
         margin-bottom: 4px;
-        color: var(--primary);
+        color: var(--accent);
         font-size: 12px;
         font-weight: 600;
       }
@@ -285,7 +341,7 @@
           transition-duration: 0.01ms !important;
         }
 
-        .flow-trace {
+        [data-motion="flow-hint"] {
           display: none;
         }
       }
@@ -293,11 +349,14 @@
       @media print {
         :root {
           color-scheme: light;
-          --background: #ffffff;
+          --background: #f5f5f5;
           --surface: #ffffff;
-          --text: #0a0a0a;
-          --muted: #4a4a4a;
-          --border: #c9c9c9;
+          --surface-muted: #ececec;
+          --text: #2d3142;
+          --muted: #4f5d75;
+          --soft: #7a8399;
+          --accent: #eb6c36;
+          --border: #bfc0c0;
           --shadow: none;
         }
 
@@ -312,7 +371,7 @@
         }
 
         .controls,
-        .flow-trace {
+        [data-motion="flow-hint"] {
           display: none !important;
         }
 
@@ -348,24 +407,27 @@
               </marker>
             </defs>
 
-            <path class="connector" d="M 180 82 C 240 82, 245 82, 305 82" />
-            <path class="flow-trace" d="M 180 82 C 240 82, 245 82, 305 82" />
-            <path class="connector" d="M 415 116 C 415 160, 415 170, 415 214" />
-            <path class="connector" d="M 525 262 C 580 262, 590 262, 645 262" />
+            <path class="connector" data-connector="evidence" data-label="{{CONNECTOR_1}}" marker-end="url(#arrow)" d="M 180 82 C 240 82, 245 82, 305 82" />
+            <path data-motion="flow-hint" d="M 180 82 C 240 82, 245 82, 305 82" />
+            <text class="connector-label" data-connector-label="evidence" x="243" y="70" text-anchor="middle">{{CONNECTOR_1}}</text>
+            <path class="connector" data-connector="selection" data-label="{{CONNECTOR_2}}" marker-end="url(#arrow)" d="M 415 116 C 415 160, 415 170, 415 214" />
+            <text class="connector-label" data-connector-label="selection" x="430" y="168">{{CONNECTOR_2}}</text>
+            <path class="connector" data-connector="return" data-label="{{CONNECTOR_3}}" marker-end="url(#arrow)" d="M 525 262 C 580 262, 590 262, 645 262" />
+            <text class="connector-label" data-connector-label="return" x="584" y="250" text-anchor="middle">{{CONNECTOR_3}}</text>
 
-            <g class="node" transform="translate(40 48)">
+            <g class="node" data-node-box="40 48 140 68" transform="translate(40 48)">
               <rect width="140" height="68" rx="12" />
               <text x="70" y="40" text-anchor="middle">{{NODE_1}}</text>
             </g>
-            <g class="node" transform="translate(305 48)">
+            <g class="node" data-node-box="305 48 220 68" transform="translate(305 48)">
               <rect width="220" height="68" rx="12" />
               <text x="110" y="40" text-anchor="middle">{{NODE_2}}</text>
             </g>
-            <g class="node" transform="translate(305 214)">
+            <g class="node" data-node-box="305 214 220 96" transform="translate(305 214)">
               <rect width="220" height="96" rx="12" />
               <text x="110" y="54" text-anchor="middle">{{NODE_3}}</text>
             </g>
-            <g class="node" transform="translate(645 228)">
+            <g class="node" data-node-box="645 228 60 68" transform="translate(645 228)">
               <rect width="60" height="68" rx="12" />
               <text x="30" y="40" text-anchor="middle">{{NODE_4}}</text>
             </g>
