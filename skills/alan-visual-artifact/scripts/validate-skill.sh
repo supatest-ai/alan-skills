@@ -27,27 +27,38 @@ fi
 
 for required_file in \
   references/routing.md \
+  references/fidelity.md \
   references/diagram-catalog.md \
   references/composition.md \
   references/rendering.md \
   references/theming.md \
   references/wireframing.md \
+  references/interactive-diagrams.md \
+  references/prototyping.md \
   references/certification.md \
   references/example-patterns.md \
   templates/artifact.html \
   templates/wireframe.html \
+  templates/interactive-diagram.html \
+  templates/prototype.html \
   examples/demo-data.json \
   examples/wireframe-data.json \
+  examples/interactive-diagram-data.json \
+  examples/prototype-data.json \
   examples/design-graph.md \
   examples/evals.md \
   scripts/render-demo.mjs \
   scripts/render-wireframe-demo.mjs \
+  scripts/render-interactive-diagram-demo.mjs \
+  scripts/render-prototype-demo.mjs \
   scripts/certify-artifact.mjs \
   scripts/validate-artifact.mjs \
   scripts/validate-theme.mjs \
   scripts/validate-diagram.mjs \
   scripts/validate-motion.mjs \
   scripts/validate-wireframe.mjs \
+  scripts/validate-interactive-diagram.mjs \
+  scripts/validate-prototype.mjs \
   scripts/test-certifier.mjs \
   scripts/test-validator.mjs; do
   if [[ ! -f "$skill_root/$required_file" ]]; then
@@ -69,7 +80,8 @@ if find "$skill_root" -type f \( -name 'openai.yaml' -o -name 'plugin.json' -o -
 fi
 
 if rg -n -i '(https?:)?//|npx skills|curl .*(upload|share|publish)|guides\.show' \
-  "$skill_root/templates" "$skill_root/scripts/render-demo.mjs" "$skill_root/scripts/render-wireframe-demo.mjs"; then
+  "$skill_root/templates" "$skill_root/scripts/render-demo.mjs" "$skill_root/scripts/render-wireframe-demo.mjs" \
+  "$skill_root/scripts/render-interactive-diagram-demo.mjs" "$skill_root/scripts/render-prototype-demo.mjs"; then
   printf '%s\n' "Template or renderer contains an external dependency or publication path" >&2
   exit 1
 fi
@@ -89,32 +101,48 @@ temporary_directory="$(mktemp -d "${TMPDIR:-/tmp}/alan-visual-artifact.XXXXXX")"
 trap 'rm -rf "$temporary_directory"' EXIT
 demo_path="$temporary_directory/demo.html"
 wireframe_path="$temporary_directory/wireframe.html"
+interactive_path="$temporary_directory/interactive-diagram.html"
+prototype_path="$temporary_directory/prototype.html"
 diagram_certificate="$temporary_directory/diagram.certificate.json"
 wireframe_certificate="$temporary_directory/wireframe.certificate.json"
+interactive_certificate="$temporary_directory/interactive-diagram.certificate.json"
+prototype_certificate="$temporary_directory/prototype.certificate.json"
 
 printf '%s\n' "Rendering and validating the self-contained fixture"
 node "$skill_root/scripts/render-demo.mjs" "$demo_path" >/dev/null
 node "$skill_root/scripts/render-wireframe-demo.mjs" "$wireframe_path" >/dev/null
+node "$skill_root/scripts/render-interactive-diagram-demo.mjs" "$interactive_path" >/dev/null
+node "$skill_root/scripts/render-prototype-demo.mjs" "$prototype_path" >/dev/null
 node "$skill_root/scripts/certify-artifact.mjs" "$demo_path" --profile diagram --output "$diagram_certificate" >/dev/null
 node "$skill_root/scripts/certify-artifact.mjs" "$wireframe_path" --profile wireframe --output "$wireframe_certificate" >/dev/null
-node "$skill_root/scripts/test-validator.mjs" "$demo_path" "$wireframe_path"
-node "$skill_root/scripts/test-certifier.mjs" "$demo_path" "$wireframe_path"
+node "$skill_root/scripts/certify-artifact.mjs" "$interactive_path" --profile interactive-diagram --output "$interactive_certificate" >/dev/null
+node "$skill_root/scripts/certify-artifact.mjs" "$prototype_path" --profile prototype --output "$prototype_certificate" >/dev/null
+node "$skill_root/scripts/test-validator.mjs" "$demo_path" "$wireframe_path" "$interactive_path" "$prototype_path"
+node "$skill_root/scripts/test-certifier.mjs" "$demo_path" "$wireframe_path" "$interactive_path" "$prototype_path"
 
 printf '%s\n' "Checking scripts and JSON fixtures"
 bash -n "$skill_root/scripts/validate-skill.sh"
 node --check "$skill_root/scripts/render-demo.mjs"
 node --check "$skill_root/scripts/render-wireframe-demo.mjs"
+node --check "$skill_root/scripts/render-interactive-diagram-demo.mjs"
+node --check "$skill_root/scripts/render-prototype-demo.mjs"
 node --check "$skill_root/scripts/certify-artifact.mjs"
 node --check "$skill_root/scripts/validate-artifact.mjs"
 node --check "$skill_root/scripts/validate-theme.mjs"
 node --check "$skill_root/scripts/validate-diagram.mjs"
 node --check "$skill_root/scripts/validate-motion.mjs"
 node --check "$skill_root/scripts/validate-wireframe.mjs"
+node --check "$skill_root/scripts/validate-interactive-diagram.mjs"
+node --check "$skill_root/scripts/validate-prototype.mjs"
 node --check "$skill_root/scripts/test-validator.mjs"
 node --check "$skill_root/scripts/test-certifier.mjs"
 node -e 'JSON.parse(require("node:fs").readFileSync(process.argv[1], "utf8"))' "$skill_root/examples/demo-data.json"
 node -e 'JSON.parse(require("node:fs").readFileSync(process.argv[1], "utf8"))' "$skill_root/examples/wireframe-data.json"
+node -e 'JSON.parse(require("node:fs").readFileSync(process.argv[1], "utf8"))' "$skill_root/examples/interactive-diagram-data.json"
+node -e 'JSON.parse(require("node:fs").readFileSync(process.argv[1], "utf8"))' "$skill_root/examples/prototype-data.json"
 node -e 'const c=JSON.parse(require("node:fs").readFileSync(process.argv[1],"utf8"));if(c.level!=="structural")process.exit(1)' "$diagram_certificate"
 node -e 'const c=JSON.parse(require("node:fs").readFileSync(process.argv[1],"utf8"));if(c.level!=="structural")process.exit(1)' "$wireframe_certificate"
+node -e 'const c=JSON.parse(require("node:fs").readFileSync(process.argv[1],"utf8"));if(c.level!=="structural")process.exit(1)' "$interactive_certificate"
+node -e 'const c=JSON.parse(require("node:fs").readFileSync(process.argv[1],"utf8"));if(c.level!=="structural")process.exit(1)' "$prototype_certificate"
 
 printf '%s\n' "alan-visual-artifact validation complete"

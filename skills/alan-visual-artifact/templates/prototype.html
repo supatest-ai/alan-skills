@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en" data-artifact-profile="prototype" data-artifact-theme="editorial">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>{{TITLE}}</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --background: #f5f5f5;
+        --surface: #ffffff;
+        --surface-muted: #ececec;
+        --text: #2d3142;
+        --muted: #4f5d75;
+        --soft: #7a8399;
+        --accent: #eb6c36;
+        --accent-foreground: #2d3142;
+        --border: #bfc0c0;
+        --success: #7c8f6f;
+        --danger: #9c6b50;
+        font-family: "Avenir Next", "Segoe UI", Helvetica, Arial, sans-serif;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --background: #2d3142;
+          --surface: #393e53;
+          --surface-muted: rgba(245, 245, 245, 0.06);
+          --text: #f5f5f5;
+          --muted: #bfc0c0;
+          --soft: #8e98ac;
+          --accent: #f08a59;
+          --accent-foreground: #2d3142;
+          --border: rgba(191, 192, 192, 0.25);
+          --success: #9caf8f;
+          --danger: #b88670;
+        }
+      }
+      :root[data-theme="light"] {
+        color-scheme: light;
+        --background: #f5f5f5;
+        --surface: #ffffff;
+        --surface-muted: #ececec;
+        --text: #2d3142;
+        --muted: #4f5d75;
+        --soft: #7a8399;
+        --accent: #eb6c36;
+        --accent-foreground: #2d3142;
+        --border: #bfc0c0;
+        --success: #7c8f6f;
+        --danger: #9c6b50;
+      }
+      :root[data-theme="dark"] {
+        color-scheme: dark;
+        --background: #2d3142;
+        --surface: #393e53;
+        --surface-muted: rgba(245, 245, 245, 0.06);
+        --text: #f5f5f5;
+        --muted: #bfc0c0;
+        --soft: #8e98ac;
+        --accent: #f08a59;
+        --accent-foreground: #2d3142;
+        --border: rgba(191, 192, 192, 0.25);
+        --success: #9caf8f;
+        --danger: #b88670;
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; color: var(--text); background: var(--background); font-size: 15px; line-height: 1.5; }
+      button { min-height: 44px; padding: 9px 14px; border: 1px solid var(--border); border-radius: 6px; color: var(--text); background: var(--surface); font: inherit; font-weight: 650; cursor: pointer; }
+      button[data-primary] { color: var(--accent-foreground); border-color: var(--accent); background: var(--accent); }
+      button:hover { border-color: var(--accent); }
+      button:focus-visible, [tabindex]:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+      h1, h2, h3, p { margin-top: 0; }
+      h1 { max-width: 760px; margin-bottom: 12px; font: 400 clamp(30px, 5vw, 46px)/1.08 Georgia, "Times New Roman", serif; }
+      h2 { font-size: 20px; }
+      h3 { font-size: 17px; }
+      .page { width: min(1120px, calc(100% - 32px)); margin: 0 auto; padding: 36px 0 64px; }
+      .eyebrow { margin-bottom: 8px; color: var(--accent); font: 700 12px ui-monospace, SFMono-Regular, Menlo, monospace; }
+      .lede { max-width: 760px; color: var(--muted); font-size: 17px; }
+      .meta { color: var(--muted); font-size: 12px; }
+      .boundary { margin: 22px 0; padding: 14px 16px; border-left: 4px solid var(--accent); background: var(--surface-muted); }
+      .layout { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.7fr); gap: 18px; align-items: start; }
+      .panel { border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+      .stage { min-height: 440px; padding: 24px; }
+      .state { display: grid; align-content: start; min-height: 390px; }
+      .state-marker { display: inline-flex; width: fit-content; margin-bottom: 24px; padding: 5px 8px; border: 1px solid var(--border); border-radius: 4px; color: var(--muted); font: 700 11px ui-monospace, SFMono-Regular, Menlo, monospace; }
+      .state[data-state-kind="success"] .state-marker { border-color: var(--success); }
+      .state[data-state-kind="error"] .state-marker { border-color: var(--danger); }
+      .state-copy { max-width: 620px; font-size: 17px; }
+      .evidence-list { display: grid; gap: 10px; padding: 0; margin: 22px 0; list-style: none; }
+      .evidence-list li { padding: 12px; border: 1px solid var(--border); background: var(--surface-muted); }
+      .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 26px; }
+      .sidebar { overflow: hidden; }
+      .sidebar section { padding: 18px; }
+      .sidebar section + section { border-top: 1px solid var(--border); }
+      table { width: 100%; border-collapse: collapse; font-size: 13px; }
+      th, td { padding: 9px 6px; border-top: 1px solid var(--border); text-align: left; vertical-align: top; }
+      th { color: var(--muted); }
+      .status { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+      .is-enhanced [data-prototype-state][hidden] { display: none; }
+      .is-enhanced .static-only { display: none; }
+      @media (max-width: 760px) {
+        .page { width: min(100% - 20px, 640px); padding-top: 22px; }
+        .layout { grid-template-columns: 1fr; }
+        .stage { min-height: 0; padding: 18px; }
+        .state { min-height: 360px; }
+        .actions { display: grid; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * { scroll-behavior: auto !important; }
+      }
+      @media print {
+        :root { color-scheme: light; --background: #f5f5f5; --surface: #ffffff; --surface-muted: #ececec; --text: #2d3142; --muted: #4f5d75; --soft: #7a8399; --accent: #eb6c36; --accent-foreground: #2d3142; --border: #bfc0c0; --success: #7c8f6f; --danger: #9c6b50; }
+        .page { width: 100%; padding: 0; }
+        .layout { display: block; }
+        .stage, .sidebar { break-inside: avoid; }
+        .sidebar { margin-top: 16px; }
+        .actions, .status { display: none; }
+        .is-enhanced [data-prototype-state][hidden], .is-enhanced .static-only { display: grid !important; }
+        .state + .state { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border); }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header>
+        <p class="eyebrow">Bounded behavioral prototype</p>
+        <h1>{{TITLE}}</h1>
+        <p class="lede">{{QUESTION}}</p>
+        <p class="meta">{{PROVENANCE}}</p>
+      </header>
+
+      <aside class="boundary" data-simulation-boundary><strong>Simulated boundary:</strong> This prototype has no backend, authentication, persistence, permission enforcement, or production side effects. Its controls exercise only the review-readiness state path.</aside>
+      <p class="status" aria-live="polite" data-status></p>
+
+      <div class="layout">
+        <section class="panel stage" aria-labelledby="prototype-stage-title">
+          <h2 id="prototype-stage-title" class="status">Prototype state</h2>
+          <article class="state" data-prototype-state="initial" data-state-kind="initial">
+            <span class="state-marker">INITIAL</span>
+            <h3>Evidence is assembled but not checked</h3>
+            <p class="state-copy">The plan has a source revision, two decisions, and three validation steps. Start the bounded readiness check before asking for approval.</p>
+            <ul class="evidence-list"><li>Source revision is present</li><li>Decision trade-offs are explicit</li><li>Browser evidence is not yet attached</li></ul>
+            <div class="actions"><button type="button" data-prototype-action="start" data-target-state="loading" data-primary>Start readiness check</button></div>
+          </article>
+
+          <article class="state" data-prototype-state="loading" data-state-kind="loading">
+            <span class="state-marker">CHECKING</span>
+            <h3>Review gates are being evaluated</h3>
+            <p class="state-copy">Choose a deterministic outcome to inspect the success or failure path. No request leaves this document.</p>
+            <ul class="evidence-list"><li>Checking artifact hash</li><li>Checking structural certificate</li><li>Checking browser-evidence manifest</li></ul>
+            <div class="actions"><button type="button" data-prototype-action="pass" data-target-state="success" data-primary>Simulate passing evidence</button><button type="button" data-prototype-action="fail" data-target-state="error">Simulate missing capture</button><button type="button" data-prototype-action="cancel" data-target-state="initial">Cancel</button></div>
+          </article>
+
+          <article class="state" data-prototype-state="success" data-state-kind="success">
+            <span class="state-marker">READY</span>
+            <h3>The artifact is ready for parent-owned review</h3>
+            <p class="state-copy">Structural checks and matching browser evidence are present. The prototype stops here; it does not approve, publish, or mutate the plan.</p>
+            <ul class="evidence-list"><li>Artifact hash matches</li><li>Required browser states passed</li><li>Visual inspection notes are recorded</li></ul>
+            <div class="actions"><button type="button" data-prototype-action="reset-success" data-target-state="initial">Reset prototype</button></div>
+          </article>
+
+          <article class="state" data-prototype-state="error" data-state-kind="error">
+            <span class="state-marker">BLOCKED</span>
+            <h3>The narrow-viewport capture is missing</h3>
+            <p class="state-copy">Readiness remains blocked. Retry returns to the explicit checking state instead of silently treating the gap as a warning.</p>
+            <ul class="evidence-list"><li>Structural certificate passed</li><li>Narrow browser evidence is missing</li><li>No approval action is available</li></ul>
+            <div class="actions"><button type="button" data-prototype-action="retry" data-target-state="loading" data-recovery-action data-primary>Retry readiness check</button><button type="button" data-prototype-action="reset-error" data-target-state="initial">Reset prototype</button></div>
+          </article>
+          <p class="static-only meta">Static and print views show every state; interactive mode displays one state at a time.</p>
+        </section>
+
+        <aside class="panel sidebar">
+          <section>
+            <h2>Decision boundary</h2>
+            <p>Does the failure path clearly block approval and provide an understandable recovery action?</p>
+          </section>
+          <section>
+            <h2>Transition map</h2>
+            <table data-transition-map>
+              <thead><tr><th>From</th><th>Action</th><th>To</th></tr></thead>
+              <tbody>
+                <tr><td>Initial</td><td>Start</td><td>Checking</td></tr>
+                <tr><td>Checking</td><td>Pass</td><td>Ready</td></tr>
+                <tr><td>Checking</td><td>Fail</td><td>Blocked</td></tr>
+                <tr><td>Blocked</td><td>Retry</td><td>Checking</td></tr>
+                <tr><td>Any end</td><td>Reset</td><td>Initial</td></tr>
+              </tbody>
+            </table>
+          </section>
+          <section><h2>Deliberate omissions</h2><p>Production data, permissions, approval mutation, persistence, and publishing remain outside this prototype.</p></section>
+        </aside>
+      </div>
+    </main>
+
+    <script>
+      (() => {
+        const states = [...document.querySelectorAll("[data-prototype-state]")];
+        const actions = [...document.querySelectorAll("[data-prototype-action]")];
+        const status = document.querySelector("[data-status]");
+        if (states.length < 4 || actions.length === 0 || !status) return;
+        document.documentElement.classList.add("is-enhanced");
+        function showState(stateId) {
+          const next = states.find((state) => state.dataset.prototypeState === stateId);
+          if (!next) return;
+          states.forEach((state) => { state.hidden = state !== next; });
+          status.textContent = `Prototype state: ${next.querySelector("h3")?.textContent || stateId}`;
+          next.querySelector("button")?.focus();
+        }
+        actions.forEach((action) => action.addEventListener("click", () => showState(action.dataset.targetState)));
+        showState("initial");
+      })();
+    </script>
+  </body>
+</html>

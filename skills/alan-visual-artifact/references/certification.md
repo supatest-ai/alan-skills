@@ -13,6 +13,10 @@ Run `scripts/certify-artifact.mjs` with the selected profile. It performs depend
 - diagram node bounds/overlap metadata, connector labels, unique references, and declared view boxes;
 - scoped motion, static-first meaning, controls, stop conditions, and reduced-motion behavior;
 - wireframe direction count, selector relationships, representative content, low-fidelity styling, and wired review controls.
+- interactive-diagram scenario integrity, focusable nodes, full-graph reset,
+  external explanations, referenced node/edge paths, and safe text-only updates;
+- prototype state coverage, transition integrity, visible simulation boundary,
+  deterministic recovery, and static transition documentation.
 
 The certificate records the artifact SHA-256, profile, executed checks, and whether browser evidence was supplied. Any structural failure is blocking.
 

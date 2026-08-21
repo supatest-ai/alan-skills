@@ -6,6 +6,11 @@ Use this reference after form selection. Load only the section matching the pare
 
 Keep a rich plan executable rather than dashboard-like.
 
+Markdown remains the default. Use HTML only when the plan needs a second
+dimension that changes understanding: side-by-side alternatives, overlapping
+work, dependency lanes, embedded examples, or expandable evidence. Do not turn
+milestones into decorative cards or progress graphics.
+
 1. Outcome: beneficiary, changed capability or decision, current pain, and success evidence.
 2. Grounding: verified current behavior, constraints, non-goals, and unresolved assumptions.
 3. Concept model: one visual only when it establishes vocabulary, boundaries, lifecycle, or dependencies.
@@ -89,6 +94,19 @@ Use a bounded wireframe only when hierarchy, navigation, disclosure, or a short 
 - Include narrow and wide reading order plus keyboard operation.
 
 Do not simulate a backend, persistence, permissions, production state, or polished product behavior.
+
+## Behavioral decision
+
+Use a bounded prototype only when state or interaction is the unresolved risk.
+Name the important path, render its relevant state envelope, show the static
+transition map, and label every simulated boundary. Keep production services,
+authentication, persistence, and permission claims outside the artifact.
+
+## Presentation
+
+Use a deck only when a presenter needs to control sequence. Keep a fixed 16:9
+stage, visible slide position, Previous/Next and arrow-key navigation, and a
+complete print/export state. Motion may pace attention but never carry meaning.
 
 ## Evidence ledger
 

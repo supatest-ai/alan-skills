@@ -15,13 +15,13 @@ const valueFor = (flag) => {
 
 if (!artifactInput) {
   process.stderr.write(
-    "Usage: node scripts/certify-artifact.mjs <artifact.html> --profile <artifact|diagram|wireframe> [--browser-evidence evidence.json] [--output certificate.json]\n",
+    "Usage: node scripts/certify-artifact.mjs <artifact.html> --profile <artifact|diagram|interactive-diagram|wireframe|prototype> [--browser-evidence evidence.json] [--output certificate.json]\n",
   );
   process.exit(2);
 }
 
 const profile = valueFor("--profile") ?? "artifact";
-if (!new Set(["artifact", "diagram", "wireframe"]).has(profile)) {
+if (!new Set(["artifact", "diagram", "interactive-diagram", "wireframe", "prototype"]).has(profile)) {
   process.stderr.write(`Unsupported certification profile: ${profile}\n`);
   process.exit(2);
 }
@@ -32,7 +32,11 @@ const artifactBytes = await readFile(artifactPath);
 const artifactSha256 = createHash("sha256").update(artifactBytes).digest("hex");
 const validators = ["validate-artifact.mjs", "validate-theme.mjs"];
 if (profile === "diagram") validators.push("validate-diagram.mjs", "validate-motion.mjs");
+if (profile === "interactive-diagram") {
+  validators.push("validate-diagram.mjs", "validate-motion.mjs", "validate-interactive-diagram.mjs");
+}
 if (profile === "wireframe") validators.push("validate-wireframe.mjs");
+if (profile === "prototype") validators.push("validate-prototype.mjs");
 
 const results = [];
 let rejected = false;

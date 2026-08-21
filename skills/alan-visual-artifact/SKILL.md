@@ -1,12 +1,12 @@
 ---
 name: alan-visual-artifact
 description: "This skill should be used when an existing Alan workflow must \"create a rich visual plan\", \"render an interactive HTML artifact\", \"choose the right diagram\", or \"visualize a decision or report\". Do not use for ordinary prose responses, decorative charts, full product UI implementation, or external artifact publishing."
-version: 1.2.0
+version: 1.3.0
 ---
 
 # Alan Visual Artifact
 
-Turn verified planning, decision, implementation, review, and test evidence into the smallest useful Alan-native artifact. Choose prose, a table, a diagram, a bounded wireframe, or self-contained interactive HTML according to the reader's question. Preserve the owning workflow's permissions, provenance, and persistence path.
+Turn verified planning, decision, implementation, review, and test evidence into the smallest useful Alan-native artifact. Choose prose, a table, an HTML plan, a diagram, an interactive diagram explorer, a bounded wireframe, a mockup, a bounded prototype, or a deck according to the reader's question. Preserve the owning workflow's permissions, provenance, and persistence path.
 
 This is an internal primitive. Existing workflows invoke it at their composition boundary; it does not replace planning, testing, review, task execution, or artifact storage.
 
@@ -16,7 +16,7 @@ It is one skill pack. Diagram selection, diagram construction, plan/report compo
 
 - Do not add a visual when prose or a compact table answers the question more clearly.
 - Do not create a decorative progress chart, pass/fail donut, invented metric, or diagram without grounded relationships.
-- Do not use this primitive to implement a production interface. A wireframe may compare unresolved information architecture, navigation, or task flow only.
+- Do not use this primitive to implement a production interface. A wireframe may compare unresolved structure; a prototype may exercise only one bounded behavior and its relevant state envelope.
 - Do not upload, share, publish, or fetch rendering dependencies from an external service. The owning Alan workflow persists the result through its existing website and artifact APIs.
 - Do not ask the user to choose a theme. Apply the fixed editorial artifact presentation contract automatically.
 - Do not silently repair missing evidence by inventing nodes, fields, owners, dates, cardinality, status, or coverage.
@@ -61,13 +61,16 @@ Reject any node, connector, state, label, number, status, or relationship withou
 
 ### 3. Select the minimum useful form
 
-Read [references/routing.md](references/routing.md). Start with this order:
+Read [references/fidelity.md](references/fidelity.md) and
+[references/routing.md](references/routing.md). HTML must earn itself by adding
+a decision-relevant dimension that linear prose cannot carry. Start with this
+order:
 
 1. prose;
 2. table;
-3. one static diagram;
-4. one bounded wireframe;
-5. self-contained interactive HTML.
+3. one static diagram or HTML plan;
+4. one bounded wireframe or mockup;
+5. one interactive diagram explorer, bounded prototype, or deck.
 
 Escalate only when the next form materially reduces ambiguity or supports a decision. Return `no visual` when prose or a table wins.
 
@@ -108,6 +111,16 @@ Keep it visibly low fidelity, use representative product language, compare at
 most three structurally different directions, and implement only the
 navigation, disclosure, or short task flow needed for the decision.
 
+For a dense architecture whose reader must inspect named request paths, read
+[references/interactive-diagrams.md](references/interactive-diagrams.md). Keep
+the full graph as the baseline, let scenario controls focus a subset without
+erasing context, and place flow and node explanations outside the graph.
+
+For a bounded behavioral prototype, read
+[references/prototyping.md](references/prototyping.md). Expose the relevant
+initial, loading, success, failure, and recovery states; label the simulated
+boundary; and omit backend, authentication, persistence, and production claims.
+
 ### 6. Render in the editorial artifact contract
 
 Read [references/rendering.md](references/rendering.md) and
@@ -129,6 +142,12 @@ For HTML artifacts:
 8. Add controls only for interaction that the question requires.
 9. Include narrow, wide, reduced-motion, and print behavior.
 
+Before visual styling, settle the artifact's audience, job, fidelity, dominant
+organizing idea, and interaction boundary. Use representative copy because
+labels, lengths, and ordering are part of the design. Number elements only when
+the order is real. Stay within the fixed editorial tokens while making the
+composition specific to the subject; do not fall back to a generic dashboard.
+
 Never load external scripts, styles, fonts, images, iframes, or renderers. Never use network requests, dynamic evaluation, storage, forms, popups, downloads, or parent/top navigation.
 
 ### 7. Validate before returning
@@ -139,7 +158,7 @@ the profile-aware certificate:
 
 ```bash
 node "<skill-directory>/scripts/certify-artifact.mjs" <artifact.html> \
-  --profile <artifact|diagram|wireframe> \
+  --profile <artifact|diagram|interactive-diagram|wireframe|prototype> \
   --output <artifact.certificate.json>
 ```
 

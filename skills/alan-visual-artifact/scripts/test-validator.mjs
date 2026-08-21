@@ -12,6 +12,8 @@ const validatorPath = resolve(scriptDirectory, "validate-artifact.mjs");
 const fixturePath = process.argv[2] ?? resolve(skillDirectory, "examples/generated/demo.html");
 const validArtifact = await readFile(fixturePath, "utf8");
 const wireframeFixturePath = process.argv[3];
+const interactiveFixturePath = process.argv[4];
+const prototypeFixturePath = process.argv[5];
 const temporaryDirectory = await mkdtemp(resolve(tmpdir(), "alan-artifact-validator-"));
 
 const cases = [
@@ -118,6 +120,58 @@ if (wireframeFixturePath) {
       name: "wireframe broken selector",
       validator: "validate-wireframe.mjs",
       html: wireframe.replace('aria-controls="overview-first"', 'aria-controls="missing"'),
+    },
+  );
+}
+
+if (interactiveFixturePath) {
+  const interactive = await readFile(interactiveFixturePath, "utf8");
+  profileCases.push(
+    {
+      name: "interactive diagram missing everything flow",
+      validator: "validate-interactive-diagram.mjs",
+      html: interactive.replace('data-flow="all"', 'data-flow="overview"'),
+    },
+    {
+      name: "interactive diagram broken flow node reference",
+      validator: "validate-interactive-diagram.mjs",
+      html: interactive.replace('data-flow-nodes="source-plan', 'data-flow-nodes="missing-node source-plan'),
+    },
+    {
+      name: "interactive diagram inaccessible node",
+      validator: "validate-interactive-diagram.mjs",
+      html: interactive.replace('tabindex="0" role="button" aria-label="Plan evidence node"', 'role="button" aria-label="Plan evidence node"'),
+    },
+    {
+      name: "interactive diagram missing explanation panel",
+      validator: "validate-interactive-diagram.mjs",
+      html: interactive.replace(" data-flow-panel", ""),
+    },
+  );
+}
+
+if (prototypeFixturePath) {
+  const prototype = await readFile(prototypeFixturePath, "utf8");
+  profileCases.push(
+    {
+      name: "prototype missing simulation boundary",
+      validator: "validate-prototype.mjs",
+      html: prototype.replace(" data-simulation-boundary", ""),
+    },
+    {
+      name: "prototype missing error state",
+      validator: "validate-prototype.mjs",
+      html: prototype.replace('data-prototype-state="error" data-state-kind="error"', 'data-prototype-state="error" data-state-kind="blocked"'),
+    },
+    {
+      name: "prototype broken transition target",
+      validator: "validate-prototype.mjs",
+      html: prototype.replace('data-target-state="loading"', 'data-target-state="unknown"'),
+    },
+    {
+      name: "prototype missing recovery action",
+      validator: "validate-prototype.mjs",
+      html: prototype.replace(" data-recovery-action", ""),
     },
   );
 }

@@ -9,8 +9,10 @@ import { fileURLToPath } from "node:url";
 
 const diagramPath = process.argv[2];
 const wireframePath = process.argv[3];
-if (!diagramPath || !wireframePath) {
-  process.stderr.write("Usage: node scripts/test-certifier.mjs <diagram.html> <wireframe.html>\n");
+const interactiveDiagramPath = process.argv[4];
+const prototypePath = process.argv[5];
+if (!diagramPath || !wireframePath || !interactiveDiagramPath || !prototypePath) {
+  process.stderr.write("Usage: node scripts/test-certifier.mjs <diagram.html> <wireframe.html> <interactive-diagram.html> <prototype.html>\n");
   process.exit(2);
 }
 
@@ -31,6 +33,12 @@ if (structuralDiagram.level !== "structural") throw new Error("Diagram did not r
 
 const structuralWireframe = run([wireframePath, "--profile", "wireframe"]);
 if (structuralWireframe.level !== "structural") throw new Error("Wireframe did not receive structural certificate");
+
+const structuralInteractive = run([interactiveDiagramPath, "--profile", "interactive-diagram"]);
+if (structuralInteractive.level !== "structural") throw new Error("Interactive diagram did not receive structural certificate");
+
+const structuralPrototype = run([prototypePath, "--profile", "prototype"]);
+if (structuralPrototype.level !== "structural") throw new Error("Prototype did not receive structural certificate");
 
 const artifactSha256 = createHash("sha256").update(await readFile(diagramPath)).digest("hex");
 const capturePath = resolve(temporaryDirectory, "wide.png");
@@ -98,5 +106,5 @@ const rejected = run([
 if (rejected.status !== "rejected") throw new Error("Mismatched browser evidence was not rejected");
 
 process.stdout.write(
-  "Certification tests passed: structural, wireframe, browser-backed, missing-notes, truncated-capture, stale-evidence rejection\n",
+  "Certification tests passed: diagram, wireframe, interactive-diagram, prototype, browser-backed, missing-notes, truncated-capture, stale-evidence rejection\n",
 );

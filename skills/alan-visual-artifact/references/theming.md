@@ -4,6 +4,13 @@ Use this contract for every HTML or SVG artifact. It deliberately removes
 open-ended art direction: agents do not choose a palette, ask a theme question,
 or infer colors from the subject.
 
+The palette is fixed, but composition is not. Before styling, decide the
+audience, reading job, artifact form, fidelity, dominant organizing idea, and
+interaction boundary. Use representative copy because wording and length shape
+the layout. Number elements only when the order is meaningful. Reject a generic
+dashboard arrangement when the subject calls for a path, comparison, spatial
+model, sequence, or editorial document.
+
 ## One theme, two presentation states
 
 Every artifact declares `data-artifact-theme="editorial"` on `<html>` and supports:
