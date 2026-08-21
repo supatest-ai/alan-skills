@@ -69,12 +69,12 @@ const profileCases = [
   {
     name: "off-palette color",
     validator: "validate-theme.mjs",
-    html: validArtifact.replace("#f5f5f5", "#7f00ff"),
+    html: validArtifact.replace("#faf9f5", "#7f00ff"),
   },
   {
     name: "gradient treatment",
     validator: "validate-theme.mjs",
-    html: validArtifact.replace("background: var(--background);", "background: linear-gradient(#f5f5f5, #eb6c36);"),
+    html: validArtifact.replace("background: var(--background);", "background: linear-gradient(#faf9f5, #788c5d);"),
   },
   {
     name: "missing explicit dark state",

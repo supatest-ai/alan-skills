@@ -8,12 +8,12 @@ The complete token contract and override order live in
 [`theming.md`](theming.md). That contract is normative; this section is the
 short rendering reminder.
 
-Use the artifact pack's own cool-paper light state and deep-charcoal dark state.
-This is deliberately independent from Alan's Electron and product-interface
-design system. Use a restrained system serif for document titles, system sans
+Use the artifact pack's own warm-cream light state and deep-ink dark state.
+This is deliberately independent from Alan's product-interface design system.
+Use a restrained system serif for document titles, system sans
 for reading and labels, and system mono for paths, code, IDs, and technical
 values. Do not download fonts. Use 4px spacing increments, compact radii,
-neutral shadows, and the warm accent on at most one focal path or decision.
+neutral shadows, and the olive accent on at most one focal path or decision.
 
 Do not expose palettes, skins, theme selectors, brand variants, or
 creative-direction questions. The artifact supports exactly two presentation

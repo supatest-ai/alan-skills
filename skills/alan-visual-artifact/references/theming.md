@@ -23,21 +23,26 @@ Every artifact declares `data-artifact-theme="editorial"` on `<html>` and suppor
 The explicit host attribute overrides the operating-system preference. Do not
 add a theme toggle inside the artifact. Alan's viewer owns presentation state.
 These tokens belong to generated plans, diagrams, reports, and wireframes only;
-they must not be sourced from or pushed into Alan's Electron/product UI.
+they must not be sourced from or pushed into Alan's product-interface UI.
 
 ## Required semantic tokens
 
+Warm cream is the default presentation. Ink, stone, and paper carry the broad
+fields; restrained olive is the only general focus and selection accent. Do not
+use orange-on-charcoal as the default diagram treatment.
+
 | Role | Light | Dark | Use |
 | --- | --- | --- | --- |
-| `background` | `#F5F5F5` | `#2D3142` | Page ground |
-| `surface` | `#FFFFFF` | `#393E53` | Cards and diagram nodes |
-| `surface-muted` | `#ECECEC` | white at 6% | Secondary regions |
-| `text` | `#2D3142` | `#F5F5F5` | Primary text and structural stroke |
-| `text-muted` | `#4F5D75` | `#BFC0C0` | Secondary text |
-| `text-soft` | `#7A8399` | `#8E98AC` | Tertiary labels |
-| `accent` | `#EB6C36` | `#F08A59` | Focus, selection, and at most one focal path |
-| `accent-foreground` | `#2D3142` | `#2D3142` | Text on a solid accent |
-| `border` | `#BFC0C0` | silver at 25% | Rules and node borders |
+| `background` | `#FAF9F5` | `#141413` | Warm paper page ground |
+| `surface` | `#FFFFFF` | `#1F1F1D` | Cards and diagram nodes |
+| `surface-muted` | `#F0EEE6` | `#2A2A28` | Secondary regions and zones |
+| `text` | `#141413` | `#FAF9F5` | Primary text and structural stroke |
+| `text-muted` | `#3D3D3A` | `#D1CFC5` | Secondary text |
+| `text-soft` | `#87867F` | `#87867F` | Tertiary labels |
+| `accent` | `#788C5D` | `#9DB07C` | Focus, selection, and at most one focal path |
+| `accent-soft` | olive at 12% | olive at 16% | One verified gate or selection region |
+| `accent-foreground` | `#FAF9F5` | `#141413` | Text on a solid accent |
+| `border` | `#D1CFC5` | `#3D3D3A` | Rules and node borders |
 | `info` | `#5E7A9B` | `#82A0C0` | Informational annotation only |
 | `success` | `#7C8F6F` | `#9CAF8F` | Verified success only |
 | `warning` | `#B8915A` | `#D3AD7A` | Verified warning only |
@@ -71,7 +76,8 @@ page chrome, card fills, headings, ambient decoration, or status semantics.
   values.
 - Use the 4px spacing grid, 4–8px diagram radii, and 12px document cards.
 - Use borders and surface contrast before shadows.
-- Keep broad color fields neutral. Warm orange is a small focal signal, not a wash.
+- Keep broad color fields cream, paper, ink, or stone. Olive is a small focal
+  signal, not a wash.
 - Wireframes use the same tokens but stay grayscale except for the focus ring.
 
 ## Anti-template gate

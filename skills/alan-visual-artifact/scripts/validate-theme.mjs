@@ -15,17 +15,17 @@ const failures = [];
 
 const allowedHex = new Set(
   [
-    "#f5f5f5",
+    "#faf9f5",
     "#ffffff",
-    "#ececec",
-    "#2d3142",
-    "#4f5d75",
-    "#7a8399",
-    "#bfc0c0",
-    "#393e53",
-    "#8e98ac",
-    "#eb6c36",
-    "#f08a59",
+    "#f0eee6",
+    "#141413",
+    "#1f1f1d",
+    "#2a2a28",
+    "#3d3d3a",
+    "#87867f",
+    "#d1cfc5",
+    "#788c5d",
+    "#9db07c",
     "#5e7a9b",
     "#82a0c0",
     "#7c8f6f",
@@ -39,7 +39,7 @@ const allowedHex = new Set(
   ].map((value) => value.toLowerCase()),
 );
 
-const allowedAlphaRgb = new Set(["0,0,0", "45,49,66", "191,192,192", "235,108,54", "240,138,89", "245,245,245", "255,255,255"]);
+const allowedAlphaRgb = new Set(["0,0,0", "20,20,19", "120,140,93", "157,176,124", "250,249,245", "255,255,255"]);
 
 if (!/<html\s+[^>]*data-artifact-theme=["']editorial["']/i.test(html)) {
   failures.push('missing data-artifact-theme="editorial"');

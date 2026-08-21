@@ -31,7 +31,7 @@ JavaScript is unavailable and in print.
 
 Use representative content and the fixed editorial artifact tokens. The
 artifact may resemble the shape of an interface, but it must not impersonate
-Alan's production UI or import Electron/product tokens. Keep one organizing
+Alan's production UI or import product-interface tokens. Keep one organizing
 idea, one primary action per state, and only the controls needed to answer the
 question.
 
